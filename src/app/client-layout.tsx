@@ -2,7 +2,8 @@
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { ReactNode, useState } from "react";
+import { usePathname } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
 
 interface IProps {
   children: ReactNode;
@@ -10,6 +11,13 @@ interface IProps {
 
 const ClientLayout = ({ children }: IProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      setIsCollapsed(true);
+    }
+  }, [setIsCollapsed, pathname]);
   return (
     <>
       <div className="px-[30px] pt-[30px] flex gap-[30px]">

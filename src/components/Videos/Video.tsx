@@ -13,7 +13,7 @@ const Video = () => {
 
       <div className="absolute left-0 right-0 bottom-0 w-full p-[10px] flex items-center justify-between gap-4 flex-wrap">
         <h3 className="text-sm font-semibold">Title of the video</h3>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 p-2 bg-black/50 rounded-lg backdrop-blur-[4px]">
           <Play className="size-[18px]" />
           <span>7.5K</span>
         </div>

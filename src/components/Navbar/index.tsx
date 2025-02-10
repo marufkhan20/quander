@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Bell, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import AuthModal from "../AuthModal";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 import CreateVideoForm from "./CreateVideoForm";
 import FilterSelect from "./FilterSelect";
 
@@ -41,14 +43,21 @@ const Navbar = ({ isCollapsed }: IProps) => {
       </button>
 
       {/* Profile */}
-      <div className="h-[46px] bg-white/5 rounded-[8px] flex items-center gap-2 pr-2 cursor-pointer text-white hover:text-primary transition-all">
-        <img
-          src="/images/profile.jpg"
-          className="h-full rounded-[8px] m-[2px]"
-          alt=""
-        />
-        <ChevronDown className="size-5" />
-      </div>
+
+      <Dialog>
+        <DialogTrigger>
+          <div className="h-[46px] bg-white/5 rounded-[8px] flex items-center gap-2 pr-2 cursor-pointer text-white hover:text-primary transition-all">
+            <img
+              src="/images/profile.jpg"
+              className="h-full rounded-[8px] m-[2px]"
+              alt=""
+            />
+            <ChevronDown className="size-5" />
+          </div>
+        </DialogTrigger>
+
+        <AuthModal />
+      </Dialog>
     </div>
   );
 };

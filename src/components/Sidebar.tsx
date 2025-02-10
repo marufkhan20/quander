@@ -67,8 +67,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
       </div>
 
       <div
-        className={`transition-all ${
-          isCollapsed ? "opacity-0 invisible" : "opacity-100 visible"
+        className={`transition-all duration-500 ${
+          isCollapsed ? "hidden" : "block"
         }`}
       >
         <RecentUploads />
