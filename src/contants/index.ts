@@ -83,3 +83,16 @@ export const TAGS: TagType[] = [
     icon: Moon,
   },
 ];
+
+export const TAGS_ITEMS: string[] = [
+  "Comedy",
+  "Adventure",
+  "Fantasy",
+  "Sci-Fi",
+  "Kids",
+  "Action",
+  "Education",
+  "Animals",
+  "Fairy Tales",
+  "Superheroes",
+];

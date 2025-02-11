@@ -4,7 +4,7 @@ import Videos from "@/components/Videos";
 
 const page = () => {
   return (
-    <main className="mt-8">
+    <main>
       <Hero />
 
       <Videos />

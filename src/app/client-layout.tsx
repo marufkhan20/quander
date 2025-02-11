@@ -16,6 +16,8 @@ const ClientLayout = ({ children }: IProps) => {
   useEffect(() => {
     if (pathname !== "/") {
       setIsCollapsed(true);
+    } else {
+      setIsCollapsed(false);
     }
   }, [setIsCollapsed, pathname]);
   return (
@@ -24,7 +26,7 @@ const ClientLayout = ({ children }: IProps) => {
         <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
         <div className="flex-1">
           <Navbar isCollapsed={isCollapsed} />
-          {children}
+          <div className="mt-8">{children}</div>
         </div>
       </div>
       <Footer />

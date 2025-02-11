@@ -9,7 +9,7 @@ import {
 import ShortVideo from "./ShortVideo";
 
 interface IProps {
-  title: string | ReactNode;
+  title?: string | ReactNode;
 }
 
 const ShortVideos = ({ title }: IProps) => {
@@ -17,11 +17,9 @@ const ShortVideos = ({ title }: IProps) => {
     <section className="mt-6 mb-10 relative">
       <Carousel>
         <div className="flex items-center justify-between gap-5 flex-wrap">
-          {title || (
-            <h2 className="text-white/60 text-lg font-semibold">
-              Short Form Videos
-            </h2>
-          )}
+          <h2 className="text-white/60 text-lg font-semibold">
+            {title || "Short Form Videos"}
+          </h2>
           <div className="flex items-center gap-2">
             <CarouselPrevious className="bg-white/5 size-9 border-none hover:bg-primary" />
             <CarouselNext className="bg-white/5 size-9 border-none hover:bg-primary" />

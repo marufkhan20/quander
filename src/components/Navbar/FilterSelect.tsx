@@ -2,10 +2,12 @@
 import { TAGS } from "@/contants";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDownIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const [filter, setFilter] = useState("All");
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,6 +35,7 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
 
   // if (!mounted) return null;
 
+  if (pathname !== "/") return null;
   return (
     <div className="relative" ref={dropdownRef}>
       <motion.button
@@ -78,16 +81,10 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
             </div>
 
             <div className="max-h-[280px] overflow-y-auto overflow-x-hidden">
-              {TAGS?.map((item, index) => {
+              {TAGS?.map((item) => {
                 const Icon = item?.icon;
                 return (
-                  <motion.div
-                    key={item?.name}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="relative group px-2"
-                  >
+                  <div key={item?.name} className="relative group px-2">
                     <button
                       className={`
                       relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200
@@ -136,7 +133,7 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
                         />
                       )}
                     </button>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>

@@ -20,7 +20,7 @@ import {
 const ShortsPage = () => {
   const isAuthor = false;
   return (
-    <main className="mt-10">
+    <main>
       <Breadcumb page={"Shorts"} />
 
       <div className="flex items-start gap-[30px] mt-[10px]">
@@ -125,7 +125,7 @@ const ShortsPage = () => {
         </div>
       </div>
 
-      <div className="mt-[10px]">
+      <div className="mt-[60px]">
         <ShortVideos
           title={
             <h3 className="font-semibold text-[22px] tracking-tight">

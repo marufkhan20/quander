@@ -11,7 +11,7 @@ import { Clock, Download, Edit, Heart, Play, User } from "lucide-react";
 const WatchPage = () => {
   const isAuthor = true;
   return (
-    <main className="mt-10">
+    <main>
       <Breadcumb page={"Watch"} />
 
       <div className="mt-3 flex justify-between gap-8">

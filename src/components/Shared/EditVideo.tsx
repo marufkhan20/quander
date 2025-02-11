@@ -1,6 +1,11 @@
+"use client";
+import { TAGS_ITEMS } from "@/contants";
+import { useState } from "react";
 import { DialogContent, DialogTitle } from "../ui/dialog";
+import Tag from "../ui/tag";
 
 const EditVideo = () => {
+  const [selectedTag, setSelectedTag] = useState("");
   return (
     <DialogContent className="bg-[#0d0d0d] border-none max-w-[700px] rounded-xl px-[30px]">
       <DialogTitle className="text-[22px] font-semibold">
@@ -32,80 +37,14 @@ const EditVideo = () => {
               Tags
             </label>
             <div className="flex gap-[10px] flex-wrap">
-              <label
-                htmlFor="comedy"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md"
-              >
-                <input type="radio" name="tags" id="comedy" />
-                Comedy
-              </label>
-              <label
-                htmlFor="adventure"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md"
-              >
-                <input type="radio" name="tags" id="adventure" />
-                Adventure
-              </label>
-              <label
-                htmlFor="fantasy"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md"
-              >
-                <input type="radio" name="tags" id="fantasy" />
-                Fantasy
-              </label>
-              <label
-                htmlFor="sci-fi"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md"
-              >
-                <input type="radio" name="tags" id="sci-fi" />
-                Sci-Fi
-              </label>
-              <label
-                htmlFor="Kids"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md"
-              >
-                <input type="radio" name="tags" id="Kids" />
-                Kids
-              </label>
-              <label
-                htmlFor="Action"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md cursor-pointer"
-              >
-                <input type="radio" name="tags" id="Action" />
-                Action
-              </label>
-
-              <label
-                htmlFor="Education"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md cursor-pointer"
-              >
-                <input type="radio" name="tags" id="Education" />
-                Education
-              </label>
-
-              <label
-                htmlFor="Animals"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md cursor-pointer"
-              >
-                <input type="radio" name="tags" id="Animals" />
-                Animals
-              </label>
-
-              <label
-                htmlFor="FairyTales"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md cursor-pointer"
-              >
-                <input type="radio" name="tags" id="FairyTales" />
-                Fairy Tales
-              </label>
-
-              <label
-                htmlFor="Superheroes"
-                className="flex items-center gap-[10px] px-3 py-4 bg-white/5 rounded-md cursor-pointer"
-              >
-                <input type="radio" name="tags" id="Superheroes" />
-                Superheroes
-              </label>
+              {TAGS_ITEMS?.map((tag) => (
+                <Tag
+                  key={tag}
+                  tag={tag}
+                  selectedTag={selectedTag}
+                  setSelectedTag={setSelectedTag}
+                />
+              ))}
             </div>
           </div>
 

@@ -90,6 +90,32 @@ body {
   }
 }
 
+.bg-white-2 {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Width */
+::-webkit-scrollbar {
+  width: 8px; /* Adjust width */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03); /* Track background color */
+  border-radius: 10px;
+}
+
+/* Thumb */
+::-webkit-scrollbar-thumb {
+  background: rgba(209, 245, 97, 0.7); /* Scrollbar color */
+  border-radius: 10px;
+}
+
+/* Thumb on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #d1f561; /* Darker color on hover */
+}
+
 .bg-nav-item {
   background: rgba(255, 255, 255, 0.03);
   color: #d1f561 !important;
