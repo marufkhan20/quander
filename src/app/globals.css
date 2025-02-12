@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css2?family=Young+Serif&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
 body {
   font-family: "Plus Jakarta Sans", serif;
@@ -88,6 +89,10 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.font-open-sans {
+  font-family: "Open Sans", serif;
 }
 
 .bg-white-2 {
