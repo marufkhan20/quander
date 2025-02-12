@@ -1,9 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import Character from "@/app/profile/[id]/_components/Character";
-import EditProfile from "@/app/profile/[id]/_components/EditProfile";
 import ShortVideo from "@/components/ShortVideos/ShortVideo";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +16,6 @@ import {
   Clock,
   Coins,
   CreditCard,
-  Edit,
   Trophy,
   User,
 } from "lucide-react";
@@ -71,15 +68,16 @@ const ProfilePage = () => {
           </p>
 
           {isAuthor ? (
-            <Dialog>
-              <DialogTrigger>
-                <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
-                  <Edit className="size-4" /> <span>Edit Profile</span>
-                </button>
-              </DialogTrigger>
+            // <Dialog>
+            //   <DialogTrigger>
+            //     <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
+            //       <Edit className="size-4" /> <span>Edit Profile</span>
+            //     </button>
+            //   </DialogTrigger>
 
-              <EditProfile />
-            </Dialog>
+            //   <EditProfile />
+            // </Dialog>
+            <></>
           ) : (
             <button className="flex w-fit items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300">
               <User /> <span>Subscribe</span>

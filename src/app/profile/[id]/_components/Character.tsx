@@ -1,13 +1,11 @@
 import { Download, Edit, EllipsisVertical, EyeOff, Trash } from "lucide-react";
 import { useState } from "react";
-import { Dialog } from "../../../../components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu";
-import EditCharacter from "./EditCharacter";
 
 /* eslint-disable @next/next/no-img-element */
 interface IProps {
@@ -60,9 +58,9 @@ const Character = ({ isAuthor }: IProps) => {
         </p>
       </div>
 
-      <Dialog open={openEditCharacter} onOpenChange={setOpenEditCharacter}>
+      {/* <Dialog open={openEditCharacter} onOpenChange={setOpenEditCharacter}>
         <EditCharacter />
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

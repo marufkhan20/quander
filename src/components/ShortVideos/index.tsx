@@ -28,22 +28,22 @@ const ShortVideos = ({ title }: IProps) => {
 
         <div className="mt-3">
           <CarouselContent>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
-            <CarouselItem className="basis-1/5">
+            <CarouselItem className="basis-1/2.5 sm:basis-1/3.5 xl:basis-1/5.5">
               <ShortVideo />
             </CarouselItem>
           </CarouselContent>

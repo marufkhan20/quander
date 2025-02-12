@@ -16,7 +16,7 @@ const Video = ({ isAuthor }: IProps) => {
   return (
     <Link
       href="#"
-      className="relative hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden"
+      className="relative hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden w-full"
     >
       <img src="/images/videos/1.jpg" className="rounded-lg" alt="" />
       <div className="bg-gradient-to-b from-transparent via-transparent rounded-lg to-black absolute inset-0 w-full h-full" />

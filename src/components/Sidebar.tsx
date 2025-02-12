@@ -23,7 +23,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
       initial={{ width: "300px" }}
       animate={{ width: !isCollapsed ? "300px" : "80px" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="bg-white/5 rounded-[10px] h-fit text-white p-5"
+      className="bg-white/5 rounded-[10px] lg:block hidden h-fit text-white p-5"
     >
       {/* Toggle Button */}
       <div className="flex items-center">
@@ -77,7 +77,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
   );
 };
 
-const NavItem = ({
+export const NavItem = ({
   icon: Icon,
   label,
   isCollapsed,
@@ -85,7 +85,7 @@ const NavItem = ({
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
-  isCollapsed: boolean;
+  isCollapsed?: boolean;
   pathname: string;
 }) => {
   const currentPath = usePathname();

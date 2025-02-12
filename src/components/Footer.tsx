@@ -3,10 +3,10 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <footer className="px-20 mt-10 pt-20 bg-black overflow-hidden">
-      <div className="flex justify-between gap-5 flex-wrap pb-12 border-b border-white/30 z-10">
+    <footer className="px-5 sm:px-10 md:px-14 lg:px-20 mt-10 pt-5 sm:pt-10 md:pt-14 lg:pt-20 bg-black overflow-hidden">
+      <div className="flex justify-between gap-5 flex-wrap pb-12 border-b border-white/30 z-10 flex-col-reverse lg:flex-row">
         <div>
-          <h2 className="text-[36px] leading-[45px] font-medium">
+          <h2 className="text-[28px] leading-[35px] md:text-[36px] md:leading-[45px] font-medium">
             Enable Humanity
             <br />
             To Bring Their Ideas To Life
@@ -59,7 +59,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-between gap-5 flex-wrap text-lg z-10">
+      <div className="mt-8 flex items-center justify-between gap-5 flex-wrap text-sm sm:text-base md:text-lg z-10">
         <p>&copy; 2025 AITube. All rights reserved.</p>
 
         <div>
@@ -67,7 +67,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <h2 className="text-[527px] text-center text-white/10 logo tracking-[-40px] font-semibold -mb-64 -mt-40 -z-20">
+      <h2 className="text-[20vw] lg:text-[25vw] text-center text-white/10 logo font-semibold -mt-[10%] select-none -mb-[15%] -z-20">
         quander
       </h2>
     </footer>

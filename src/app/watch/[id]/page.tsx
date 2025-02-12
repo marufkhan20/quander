@@ -2,11 +2,9 @@
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/Comments/CommentBox";
 import Breadcumb from "@/components/Shared/Breadcumb";
-import EditVideo from "@/components/Shared/EditVideo";
 import VideoPlayer from "@/components/Shared/VideoPlayer";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import Video from "@/components/Videos/Video";
-import { Clock, Download, Edit, Heart, Play, User } from "lucide-react";
+import { Clock, Download, Heart, Play, User } from "lucide-react";
 
 const WatchPage = () => {
   const isAuthor = true;
@@ -81,15 +79,16 @@ const WatchPage = () => {
                   <User /> <span>Subscribe</span>
                 </button>
               ) : (
-                <Dialog>
-                  <DialogTrigger>
-                    <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
-                      <Edit className="size-4" /> <span>Edit</span>
-                    </button>
-                  </DialogTrigger>
+                // <Dialog>
+                //   <DialogTrigger>
+                //     <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
+                //       <Edit className="size-4" /> <span>Edit</span>
+                //     </button>
+                //   </DialogTrigger>
 
-                  <EditVideo />
-                </Dialog>
+                //   <EditVideo />
+                // </Dialog>
+                <></>
               )}
             </div>
           </div>
