@@ -122,7 +122,7 @@ const ShortsPage = () => {
 
           <div className="mt-[30px] md:mt-[60px]">
             <button
-              className="flex md:hidden items-center justify-between gap-2 w-full px-5 py-6 bg-white-2 rounded-lg mb-4 text-lg cursor-pointer"
+              className="flex xl:hidden items-center justify-between gap-2 w-full px-5 py-6 bg-white-2 rounded-lg mb-4 text-lg cursor-pointer"
               onClick={() => setOpenCommentBox(!openCommentBox)}
             >
               <span className="font-extrabold">
@@ -137,7 +137,7 @@ const ShortsPage = () => {
             </button>
 
             {/* mobile */}
-            <div className="block md:hidden">
+            <div className="block xl:hidden">
               <AnimatePresence>
                 {openCommentBox && (
                   <motion.div
@@ -157,7 +157,7 @@ const ShortsPage = () => {
               </AnimatePresence>
             </div>
 
-            <div className="hidden md:block">
+            <div className="hidden xl:block">
               <CommentBox />
               <div className="mt-10">
                 <Comments />

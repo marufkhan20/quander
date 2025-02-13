@@ -2,6 +2,7 @@
 "use client";
 import Character from "@/app/profile/[id]/_components/Character";
 import ShortVideo from "@/components/ShortVideos/ShortVideo";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,10 +17,12 @@ import {
   Clock,
   Coins,
   CreditCard,
+  Edit,
   Trophy,
   User,
 } from "lucide-react";
 import { useState } from "react";
+import EditProfile from "./_components/EditProfile";
 
 const tabs = ["Videos (37)", "Shorts (8)", "Characters (3)"];
 
@@ -31,34 +34,36 @@ const ProfilePage = () => {
   return (
     <main>
       {/* profile details */}
-      <section className="bg-white-2 p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-wrap">
-        <div className="flex items-center gap-5">
+      <section className="bg-white-2 p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-col lg:flex-row">
+        <div className="flex flex-1 items-center gap-5">
           <img
             src="/images/profile-img.avif"
-            className="size-[120px] rounded-[10px]"
+            className="size-[80px] md:size-[120px] rounded-[10px]"
             alt="profile img"
           />
           <div>
-            <h3 className="text-[22px] font-semibold">Vincent Blackwell</h3>
+            <h3 className="text-lg md:text-[22px] font-semibold">
+              Vincent Blackwell
+            </h3>
             <ul className="mt-3 mb-4 flex items-center gap-[10px] divide-x-[1px] divide-white/20">
-              <li className="text-white/80">
+              <li className="text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">6K</span> subscribers
               </li>
-              <li className="pl-[10px] text-white/80">
+              <li className="pl-[10px] text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">247</span>{" "}
                 subscriptions
               </li>
-              <li className="pl-[10px] text-white/80">
+              <li className="pl-[10px] text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">17K</span> likes
               </li>
             </ul>
-            <p className="w-[70%] text-white/80">
+            <p className="md:w-[70%] text-white/80 text-xs md:text-base">
               Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
               excepturi quo iure, ea obcaecati minus.
             </p>
           </div>
         </div>
-        <div className="flex flex-col justify-between h-[120px] items-end">
+        <div className="w-full lg:w-auto flex lg:flex-col justify-between lg:h-[120px] lg:items-end">
           <p className="flex items-center gap-1 text-sm text-white/80">
             <Trophy className="size-4 text-[#fdac00]" />
             <span>
@@ -68,16 +73,15 @@ const ProfilePage = () => {
           </p>
 
           {isAuthor ? (
-            // <Dialog>
-            //   <DialogTrigger>
-            //     <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
-            //       <Edit className="size-4" /> <span>Edit Profile</span>
-            //     </button>
-            //   </DialogTrigger>
+            <Dialog>
+              <DialogTrigger>
+                <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
+                  <Edit className="size-4" /> <span>Edit Profile</span>
+                </button>
+              </DialogTrigger>
 
-            //   <EditProfile />
-            // </Dialog>
-            <></>
+              <EditProfile />
+            </Dialog>
           ) : (
             <button className="flex w-fit items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300">
               <User /> <span>Subscribe</span>
@@ -88,27 +92,33 @@ const ProfilePage = () => {
 
       {/* profile info */}
       {isAuthor && (
-        <section className="bg-white-2 mt-[10px] p-6 rounded-[10px] flex items-center justify-between text-center">
-          <div className="flex-1 flex items-center justify-center">
-            <p className="flex items-center font-semibold gap-1 text-sm text-white/80">
-              <Coins className="size-4" />
-              <span>Credits:</span>
+        <section className="bg-white-2 mt-[10px] px-3 py-6 lg:p-6 rounded-[10px] flex md:items-center md:justify-between md:text-center flex-col md:flex-row gap-y-4">
+          <div className="flex-1 flex md:items-center justify-between md:justify-center w-full">
+            <p className="flex items-center font-semibold gap-1 text-sm text-white/80 justify-between w-full md:justify-center">
+              <div className="flex items-center gap-1">
+                <Coins className="size-4" />
+                <span>Credits:</span>
+              </div>
               <span className="text-white font-medium">2634</span>
             </p>
           </div>
 
-          <div className="flex-1 flex items-center justify-center">
-            <p className="flex items-center font-semibold gap-1 text-sm text-white/80">
-              <Clock className="size-4" />
-              <span>Available Video Time:</span>
+          <div className="flex-1 flex md:items-center justify-between md:justify-center w-full">
+            <p className="flex items-center font-semibold gap-1 text-sm text-white/80 justify-between w-full md:justify-center">
+              <div className="flex items-center gap-1">
+                <Clock className="size-4" />
+                <span>Available Video Time:</span>
+              </div>
               <span className="text-white font-medium">250m 20s</span>
             </p>
           </div>
 
-          <div className="flex-1 flex items-center justify-center">
-            <p className="flex items-center gap-1 font-semibold text-sm text-white/80">
-              <CreditCard className="size-4" />
-              <span>Credit Value:</span>
+          <div className="flex-1 flex md:items-center justify-between md:justify-center w-full">
+            <p className="flex items-center gap-1 font-semibold text-sm text-white/80 justify-between w-full md:justify-center">
+              <div className="flex items-center gap-1">
+                <CreditCard className="size-4" />
+                <span>Credit Value:</span>
+              </div>
               <span className="text-white font-medium">$205.99</span>
             </p>
           </div>
@@ -118,14 +128,14 @@ const ProfilePage = () => {
       {/* videos and characters */}
       <section>
         {/* tabs and filter */}
-        <div className="flex items-center justify-between gap-5 flex-wrap">
-          <div className="w-fit p-1 bg-white/5 rounded-[10px] mt-6 flex items-center">
+        <div className="flex items-center justify-between gap-5 flex-wrap mt-6">
+          <div className="w-full md:w-fit p-1 bg-white/5 rounded-[10px] flex items-center">
             {tabs.map((tab, index) => (
               <button
                 key={index}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  "py-[10px] px-9 relative rounded-md transition-all",
+                  "py-[10px] flex-1 md:flex-none px-6 md:px-9 relative rounded-md transition-all",
                   activeTab === tab && "text-primary"
                 )}
                 role="tab"
@@ -144,12 +154,12 @@ const ProfilePage = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-[10px]">
+          <div className="flex flex-1 md:flex-none items-center gap-[10px]">
             {isAuthor && (
               <DropdownMenu open={statusOpen} onOpenChange={setStatusOpen}>
                 <DropdownMenuTrigger
                   onClick={() => setStatusOpen(!statusOpen)}
-                  className="outline-none py-[14px] px-6 bg-white/5 rounded-lg font-normal text-base flex items-center gap-4"
+                  className="outline-none py-[14px] px-6 bg-white/5 rounded-lg justify-center font-normal text-base flex items-center gap-4 w-full"
                 >
                   Public
                   <ChevronDownIcon
@@ -171,7 +181,7 @@ const ProfilePage = () => {
             <DropdownMenu open={filterOpen} onOpenChange={setFilterOpen}>
               <DropdownMenuTrigger
                 onClick={() => setFilterOpen(!filterOpen)}
-                className="outline-none py-[14px] px-6 bg-white/5 rounded-lg font-normal text-base flex items-center gap-4"
+                className="outline-none py-[14px] px-6 bg-white/5 rounded-lg w-full justify-center font-normal text-base flex items-center gap-4"
               >
                 Latest
                 <ChevronDownIcon
@@ -206,7 +216,7 @@ const ProfilePage = () => {
             className="mt-5"
           >
             {activeTab === tabs[0] && (
-              <div className="grid grid-cols-4 gap-[10px]">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[10px]">
                 <Video isAuthor={isAuthor} />
                 <Video isAuthor={isAuthor} />
                 <Video isAuthor={isAuthor} />
@@ -220,7 +230,7 @@ const ProfilePage = () => {
             )}
 
             {activeTab === tabs[1] && (
-              <div className="grid grid-cols-5 gap-[10px]">
+              <div className="grid sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-[10px]">
                 <ShortVideo isAuthor={isAuthor} />
                 <ShortVideo isAuthor={isAuthor} />
                 <ShortVideo isAuthor={isAuthor} />
@@ -234,7 +244,7 @@ const ProfilePage = () => {
             )}
 
             {activeTab === tabs[2] && (
-              <div className="grid grid-cols-4 gap-[10px]">
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[10px]">
                 <Character isAuthor={isAuthor} />
                 <Character isAuthor={isAuthor} />
                 <Character isAuthor={isAuthor} />
