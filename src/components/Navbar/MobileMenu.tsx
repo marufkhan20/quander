@@ -3,7 +3,9 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { MoveRight, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AuthModalMobile } from "../AuthModal";
 import { NavItem } from "../Sidebar";
 import CreateVideoForm from "./CreateVideoForm";
 
@@ -14,14 +16,12 @@ interface IProps {
 
 const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
   const [mobileCreateForm, setMobileCreateForm] = useState(false);
-
-  console.log("mobileCreateForm", mobileCreateForm);
+  const [openAuth, setOpenAuth] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (mobileCreateForm) {
-      setOpenMobileMenu(false);
-    }
-  }, [mobileCreateForm, setOpenMobileMenu]);
+    setOpenMobileMenu(false);
+  }, [mobileCreateForm, setOpenMobileMenu, openAuth, pathname]);
   return (
     <>
       <div
@@ -68,6 +68,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
                     icon={item?.icon}
                     label={item?.name}
                     pathname={item?.pathname}
+                    onClick={() => item.name === "Profile" && setOpenAuth(true)}
                   />
                 </motion.div>
               ))}
@@ -89,6 +90,9 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
           setMobileCreateForm={setMobileCreateForm}
         />
       </div>
+
+      {/* Auth mobile */}
+      <AuthModalMobile open={openAuth} setOpen={setOpenAuth} />
     </>
   );
 };

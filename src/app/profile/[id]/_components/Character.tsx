@@ -1,4 +1,5 @@
-import { Download, Edit, EllipsisVertical, EyeOff, Trash } from "lucide-react";
+import { Dialog } from "@/components/ui/dialog";
+import { Edit, EllipsisVertical, EyeOff, Trash } from "lucide-react";
 import { useState } from "react";
 import {
   DropdownMenu,
@@ -6,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../../../../components/ui/dropdown-menu";
+import EditCharacter, { MobileEditCharacter } from "./EditCharacter";
 
 /* eslint-disable @next/next/no-img-element */
 interface IProps {
@@ -14,6 +16,7 @@ interface IProps {
 
 const Character = ({ isAuthor }: IProps) => {
   const [openEditCharacter, setOpenEditCharacter] = useState(false);
+  const [openMobileEditCharacter, setOpenMobileEditCharacter] = useState(false);
   return (
     <div className="p-5 pb-10 bg-white-2 rounded-[10px]">
       <img
@@ -35,15 +38,21 @@ const Character = ({ isAuthor }: IProps) => {
               <DropdownMenuContent className="p-5 bg-black/80 backdrop-blur-[20px] border-none rounded-[10px] flex flex-col gap-3">
                 <DropdownMenuItem
                   onClick={() => setOpenEditCharacter(true)}
-                  className="cursor-pointer bg-transparent text-white hover:!bg-primary"
+                  className="hidden lg:flex items-center cursor-pointer bg-transparent text-white hover:!bg-primary"
                 >
                   <Edit /> <span>Edit character</span>
                 </DropdownMenuItem>
+
+                {/* mobile */}
+                <DropdownMenuItem
+                  onClick={() => setOpenMobileEditCharacter(true)}
+                  className="flex items-center lg:hidden cursor-pointer bg-transparent text-white hover:!bg-primary"
+                >
+                  <Edit /> <span>Edit character</span>
+                </DropdownMenuItem>
+
                 <DropdownMenuItem className="cursor-pointer bg-transparent text-white hover:!bg-primary">
                   <EyeOff /> <span>Hide from profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer bg-transparent text-white hover:!bg-primary">
-                  <Download /> <span>Download video</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer bg-transparent text-red-700 hover:!bg-red-700 hover:!text-white">
                   <Trash /> <span>Delete</span>
@@ -58,9 +67,15 @@ const Character = ({ isAuthor }: IProps) => {
         </p>
       </div>
 
-      {/* <Dialog open={openEditCharacter} onOpenChange={setOpenEditCharacter}>
+      <Dialog open={openEditCharacter} onOpenChange={setOpenEditCharacter}>
         <EditCharacter />
-      </Dialog> */}
+      </Dialog>
+
+      {/* mobile */}
+      <MobileEditCharacter
+        open={openMobileEditCharacter}
+        setOpen={setOpenMobileEditCharacter}
+      />
     </div>
   );
 };

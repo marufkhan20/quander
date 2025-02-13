@@ -1,4 +1,4 @@
-import { Carousel, CarouselContent } from "../ui/carousel";
+import { Carousel, CarouselContent } from "@/components/ui/carousel";
 import FeaturedVideo from "./FeaturedVideo";
 
 const Hero = () => {

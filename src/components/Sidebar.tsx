@@ -82,18 +82,25 @@ export const NavItem = ({
   label,
   isCollapsed,
   pathname,
+  onClick,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   isCollapsed?: boolean;
   pathname: string;
+  onClick?: () => void;
 }) => {
   const currentPath = usePathname();
+  const isProfile = label === "Profile";
+
+  const Wrapper: React.ElementType = isProfile ? "div" : Link;
+  const wrapperProps = isProfile ? { onClick } : { href: pathname, onClick };
+
   return (
-    <Link
-      href="#"
+    <Wrapper
+      {...wrapperProps}
       className={cn(
-        "flex items-center gap-3 p-[10px] rounded-[8px] bg-nav-item-hover transition-all",
+        "flex items-center gap-3 cursor-pointer p-[10px] rounded-[8px] bg-nav-item-hover transition-all",
         isCollapsed ? "justify-center" : "justify-start",
         currentPath === pathname && "bg-nav-item"
       )}
@@ -106,7 +113,7 @@ export const NavItem = ({
       >
         {label}
       </motion.span>
-    </Link>
+    </Wrapper>
   );
 };
 

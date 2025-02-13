@@ -56,7 +56,6 @@ const Navbar = ({ isCollapsed }: IProps) => {
         </button>
 
         {/* Profile */}
-
         <Dialog>
           <DialogTrigger className="hidden lg:block">
             <div className="h-[46px] bg-white/5 rounded-[8px] flex items-center gap-2 pr-2 cursor-pointer text-white hover:text-primary transition-all">

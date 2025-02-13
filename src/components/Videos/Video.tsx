@@ -15,7 +15,7 @@ interface IProps {
 const Video = ({ isAuthor }: IProps) => {
   return (
     <Link
-      href="#"
+      href="/watch/video-1"
       className="relative hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden w-full"
     >
       <img src="/images/videos/1.jpg" className="rounded-lg" alt="" />

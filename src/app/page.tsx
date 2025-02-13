@@ -1,9 +1,9 @@
 "use client";
-import Hero from "@/components/Hero";
 import ShortVideos from "@/components/ShortVideos";
 import Videos from "@/components/Videos";
 import { useLayout } from "@/context/LayoutContext";
 import { cn } from "@/lib/utils";
+import Hero from "./_components/Hero";
 
 const HomePage = () => {
   const { isCollapsed } = useLayout();

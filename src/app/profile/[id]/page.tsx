@@ -22,7 +22,7 @@ import {
   User,
 } from "lucide-react";
 import { useState } from "react";
-import EditProfile from "./_components/EditProfile";
+import EditProfile, { MobileEditProfile } from "./_components/EditProfile";
 
 const tabs = ["Videos (37)", "Shorts (8)", "Characters (3)"];
 
@@ -31,21 +31,22 @@ const ProfilePage = () => {
   const isAuthor = true;
   const [filterOpen, setFilterOpen] = useState(false);
   const [statusOpen, setStatusOpen] = useState(false);
+  const [openEditProfile, setOpenEditProfile] = useState(false);
   return (
     <main>
       {/* profile details */}
-      <section className="bg-white-2 p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-col lg:flex-row">
+      <section className="bg-white-2 p-5 sm:p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-col lg:flex-row">
         <div className="flex flex-1 items-center gap-5">
           <img
             src="/images/profile-img.avif"
-            className="size-[80px] md:size-[120px] rounded-[10px]"
+            className="size-[60px] sm:size-[80px] md:size-[120px] rounded-[10px]"
             alt="profile img"
           />
           <div>
             <h3 className="text-lg md:text-[22px] font-semibold">
               Vincent Blackwell
             </h3>
-            <ul className="mt-3 mb-4 flex items-center gap-[10px] divide-x-[1px] divide-white/20">
+            <ul className="mt-3 mb-4 flex items-center gap-[10px] divide-x-[1px] divide-white/20 flex-wrap">
               <li className="text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">6K</span> subscribers
               </li>
@@ -63,7 +64,7 @@ const ProfilePage = () => {
             </p>
           </div>
         </div>
-        <div className="w-full lg:w-auto flex lg:flex-col justify-between lg:h-[120px] lg:items-end">
+        <div className="w-full lg:w-auto flex lg:flex-col justify-between lg:h-[120px] lg:items-end flex-wrap gap-y-4">
           <p className="flex items-center gap-1 text-sm text-white/80">
             <Trophy className="size-4 text-[#fdac00]" />
             <span>
@@ -73,15 +74,24 @@ const ProfilePage = () => {
           </p>
 
           {isAuthor ? (
-            <Dialog>
-              <DialogTrigger>
-                <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
-                  <Edit className="size-4" /> <span>Edit Profile</span>
-                </button>
-              </DialogTrigger>
+            <>
+              <Dialog>
+                <DialogTrigger>
+                  <button className="hidden lg:flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
+                    <Edit className="size-4" /> <span>Edit Profile</span>
+                  </button>
+                </DialogTrigger>
 
-              <EditProfile />
-            </Dialog>
+                <EditProfile />
+              </Dialog>
+
+              <button
+                className="flex lg:hidden items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300"
+                onClick={() => setOpenEditProfile(true)}
+              >
+                <Edit className="size-4" /> <span>Edit Profile</span>
+              </button>
+            </>
           ) : (
             <button className="flex w-fit items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300">
               <User /> <span>Subscribe</span>
@@ -135,7 +145,7 @@ const ProfilePage = () => {
                 key={index}
                 onClick={() => setActiveTab(tab)}
                 className={cn(
-                  "py-[10px] flex-1 md:flex-none px-6 md:px-9 relative rounded-md transition-all",
+                  "py-[10px] flex-1 md:flex-none px-4 sm:px-6 md:px-9 relative rounded-md transition-all",
                   activeTab === tab && "text-primary"
                 )}
                 role="tab"
@@ -259,6 +269,9 @@ const ProfilePage = () => {
           </motion.div>
         </AnimatePresence>
       </section>
+
+      {/* mobile */}
+      <MobileEditProfile open={openEditProfile} setOpen={setOpenEditProfile} />
     </main>
   );
 };

@@ -1,6 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
+import {
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { ArrowDownToLine, Clock, Ellipsis, Heart, Play } from "lucide-react";
-import { CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel";
+import Link from "next/link";
 
 const FeaturedVideo = () => {
   return (
@@ -52,10 +57,13 @@ const FeaturedVideo = () => {
               laboriosam doloremque quisquam officiis?
             </p>
             <div className="mt-6 flex items-center flex-wrap gap-[10px]">
-              <button className="flex items-center gap-[10px] bg-primary rounded-sm px-4 py-2.5 text-black transition-all hover:scale-105 duration-300">
+              <Link
+                href="/watch/video-1"
+                className="flex items-center gap-[10px] bg-primary rounded-sm px-4 py-2.5 text-black transition-all hover:scale-105 duration-300"
+              >
                 <Play className="size-4" />
                 <span>Watch Now</span>
-              </button>
+              </Link>
               <button className="flex items-center gap-[10px] bg-black/50 rounded-sm px-4 py-2.5 text-primary transition-all hover:scale-105 duration-300 backdrop-blur-[20px]">
                 <ArrowDownToLine className="size-4" />
                 <span>Download</span>
