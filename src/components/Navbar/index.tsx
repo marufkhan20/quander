@@ -20,7 +20,7 @@ const Navbar = ({ isCollapsed }: IProps) => {
   const [createForm, setCreateForm] = useState(false);
   return (
     <>
-      <div className="w-full flex items-center gap-4">
+      <div className="w-full hidden lg:flex items-center gap-4">
         {/* Logo */}
         <motion.span
           initial={{ display: "none" }}
