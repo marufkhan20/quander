@@ -28,7 +28,7 @@ const Subscriptions = () => {
           </div>
 
           <div className="mt-3 pb-4">
-            <CarouselContent className="gap-5 md:gap-[30px] w-[calc(100vw-100px)]">
+            <CarouselContent className="gap-5 md:gap-[30px] w-[calc(100vw-100px)] md:w-auto">
               <CarouselItem className="basis-1/1.2 md:basis-1/2.5 lg:basis-1/3 flex flex-col gap-[10px] divide-y-[1px] divide-white/5 flex-wrap">
                 <User />
                 <User />
