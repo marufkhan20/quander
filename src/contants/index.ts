@@ -44,7 +44,7 @@ export const SIDEBAR_ITEMS: SidebarItemType[] = [
   {
     name: "Credits",
     icon: Coins,
-    pathname: "/credits",
+    pathname: "/pricing",
   },
   {
     name: "Settings",
