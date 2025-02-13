@@ -7,19 +7,19 @@ import { useState } from "react";
 const PricingPage = () => {
   const [activeTab, setActiveTab] = useState("monthly");
   return (
-    <main className="mt-10 px-20 mb-10">
-      <h2 className="text-center text-[32px] leading-[40px] font-extrabold mb-4">
+    <main className="mt-10 sm:px-10 xl:px-20 mb-10">
+      <h2 className="text-center text-[24px] leading-[18px] md:text-[32px] md:leading-[40px] font-extrabold mb-4">
         A plan for every need
       </h2>
-      <p className="text-center text-white/80">
+      <p className="text-center text-sm md:text-base text-white/80">
         Turn your ideas into vibrant animated videos in minute. Choose a <br />
         plan that fits you and start creating.
       </p>
 
-      <div className="w-fit mx-auto p-1 rounded-[10px] bg-white/5 flex items-center gap-2 mt-10">
+      <div className="sm:w-fit mx-auto p-1 rounded-[10px] bg-white/5 flex items-center gap-2 mt-10">
         <button
           className={cn(
-            "w-[230px] py-[10px] rounded-md transition-all relative",
+            "flex-1 sm:w-[230px] py-[10px] rounded-md transition-all relative",
             activeTab === "monthly" && "text-primary"
           )}
           onClick={() => setActiveTab("monthly")}
@@ -35,7 +35,7 @@ const PricingPage = () => {
         </button>
         <button
           className={cn(
-            "w-[230px] py-[10px] rounded-md transition-all relative",
+            "flex-1 sm:w-[230px] py-[10px] rounded-md transition-all relative",
             activeTab === "yearly" && "text-primary"
           )}
           onClick={() => setActiveTab("yearly")}
@@ -51,12 +51,14 @@ const PricingPage = () => {
         </button>
       </div>
 
-      <div className="mt-10 grid items-center grid-cols-3 gap-[30px]">
+      <div className="mt-10 grid items-center sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
         <div className="rounded-[10px] bg-white-2 h-fit">
           <div className="bg-white-2 p-[30px] pb-5">
             <h4 className="text-base font-medium">Basic Plan</h4>
             <div className="flex items-end gap-1 mt-5">
-              <h2 className="text-[46px] leading-[57px] font-semibold">$19</h2>
+              <h2 className="text-[38px] leading-[47px] md:text-[46px] md:leading-[57px] font-semibold">
+                $19
+              </h2>
               <span className="text-[24px] font-semibold">/month</span>
             </div>
             <p className="mt-5 font-medium text-white/80">100 Video Credits</p>
@@ -105,7 +107,9 @@ const PricingPage = () => {
               </p>
             </div>
             <div className="flex items-end gap-1 mt-5">
-              <h2 className="text-[46px] leading-[57px] font-semibold">$34</h2>
+              <h2 className="text-[38px] leading-[47px] md:text-[46px] md:leading-[57px] font-semibold">
+                $34
+              </h2>
               <span className="text-[24px] font-semibold">/month</span>
             </div>
             <p className="mt-5 font-medium text-white/80">100 Video Credits</p>
@@ -160,7 +164,9 @@ const PricingPage = () => {
           <div className="bg-white-2 p-[30px] pb-5">
             <h4 className="text-base font-medium">Premium Plan</h4>
             <div className="flex items-end gap-1 mt-5">
-              <h2 className="text-[46px] leading-[57px] font-semibold">$59</h2>
+              <h2 className="text-[38px] leading-[47px] md:text-[46px] md:leading-[57px] font-semibold">
+                $59
+              </h2>
               <span className="text-[24px] font-semibold">/month</span>
             </div>
             <p className="mt-5 font-medium text-white/80">100 Video Credits</p>
