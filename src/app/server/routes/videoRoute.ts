@@ -17,18 +17,19 @@ const app = new Hono()
     zValidator(
       "json",
       z.object({
-        published: z.boolean(),
+        published: z.boolean().optional(),
+        title: z.string().optional(),
+        description: z.string().optional(),
+        tag: z.string().optional(),
       })
     ),
     async (c) => {
       const { id } = c.req.param();
-      const { published } = await c.req.valid("json");
+      const body = await c.req.valid("json");
 
       const updatedVideo = await prisma.video.update({
         where: { id },
-        data: {
-          published,
-        },
+        data: body,
       });
 
       return c.json(updatedVideo);

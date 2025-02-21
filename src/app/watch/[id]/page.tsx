@@ -5,7 +5,7 @@ import { useGetRelatedVideos, useGetVideo } from "@/api/useVideos";
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/Comments/CommentBox";
 import Breadcumb from "@/components/Shared/Breadcumb";
-import EditVideo from "@/components/Shared/EditVideo";
+import EditVideo, { MobileEditVideo } from "@/components/Shared/EditVideo";
 import VideoPlayer from "@/components/Shared/VideoPlayer";
 import {
   Carousel,
@@ -45,6 +45,13 @@ const WatchPage = () => {
   const { id } = useParams();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [totalSubscribers, setTotalSubscribers] = useState(0);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openMobileEdit, setOpenMobileEdit] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tag, setTag] = useState("");
+  const [views, setViews] = useState(0);
+  const [likes, setLikes] = useState(0);
 
   const { data: session } = useSession();
 
@@ -59,7 +66,16 @@ const WatchPage = () => {
     queryKey: `get-video-${id}`,
   });
 
+  // update local state
   useEffect(() => {
+    if (video?.id) {
+      setTitle(video?.title);
+      setDescription(video?.description || "");
+      setTag(video?.tag || "");
+      setViews(video?.views);
+      setLikes(video?.likes);
+    }
+
     // check subscribe or not
     if (video?.channel) {
       const isSubscribed = video?.channel?.subscribers.some(
@@ -75,6 +91,17 @@ const WatchPage = () => {
       }
     }
   }, [session, video]);
+
+  // handle update video
+  const handleUpdateVideo = (
+    title?: string,
+    tag?: string,
+    description?: string
+  ) => {
+    setTitle(title || "");
+    setDescription(description || "");
+    setTag(tag || "");
+  };
 
   // get releated videos
   const { data: releatedVideos, isLoading: isReleatedVideoLoading } =
@@ -141,7 +168,7 @@ const WatchPage = () => {
     return notFound();
   }
   return (
-    <main>
+    <main className="relative">
       <Breadcumb page={"Watch"} />
 
       <div className="mt-3 flex flex-col md:flex-row justify-between gap-8">
@@ -156,12 +183,12 @@ const WatchPage = () => {
             <div className="mt-8 pb-10 border-b border-white/10">
               <div className="flex items-center justify-between gap-5 flex-wrap">
                 <h2 className="text-[20px] leading-[18px] md:text-[26px] md:leading-[18px] font-semibold">
-                  {video?.title}
+                  {title}
                 </h2>
                 <div className="flex items-center gap-[10px]">
-                  {video?.tag && (
+                  {tag && (
                     <span className="inline-block py-4 px-5 bg-white/5 rounded-lg">
-                      {video?.tag}
+                      {tag}
                     </span>
                   )}
                   <div className="!w-11 !h-11 rounded-full flex items-center justify-center cursor-pointer bg-[#d1f561]/5 transition-all hover:bg-primary hover:text-black text-primary">
@@ -171,17 +198,17 @@ const WatchPage = () => {
                     <div className="w-11 h-11 rounded-full flex items-center justify-center text-[#e24988] bg-[#e24988]/5 cursor-pointer">
                       <Heart className="size-6" />
                     </div>
-                    <span>{formatNumbers(video?.likes)}</span>
+                    <span>{formatNumbers(likes)}</span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-sm md:text-base mt-6">{video?.description}</p>
+              <p className="text-sm md:text-base mt-6">{description}</p>
 
               <div className="flex items-center gap-2 mt-6">
                 <div className="flex items-center gap-1 pr-2 border-r border-white/20">
                   <Play className="size-[18px]" />
-                  <span>{formatNumbers(video?.views)}</span>
+                  <span>{formatNumbers(views)}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="size-[18px]" />
@@ -242,15 +269,32 @@ const WatchPage = () => {
                     {!session && <TooltipContent>Please Login</TooltipContent>}
                   </Tooltip>
                 ) : (
-                  <Dialog>
-                    <DialogTrigger>
-                      <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
-                        <Edit className="size-4" /> <span>Edit</span>
-                      </button>
-                    </DialogTrigger>
+                  <>
+                    <div className="hidden lg:block">
+                      <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+                        <DialogTrigger>
+                          <button className="hidden lg:flex items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300">
+                            <Edit className="size-4" /> <span>Edit</span>
+                          </button>
+                        </DialogTrigger>
 
-                    <EditVideo />
-                  </Dialog>
+                        <EditVideo
+                          setOpen={setOpenEdit}
+                          title={title}
+                          description={description || ""}
+                          id={video?.id || ""}
+                          tag={tag || ""}
+                          handleUpdate={handleUpdateVideo}
+                        />
+                      </Dialog>
+                    </div>
+                    <button
+                      className="flex lg:hidden items-center gap-[10px] py-2 px-4 rounded-md text-sm bg-white/5 transition-all hover:scale-105 hover:bg-primary hover:text-black duration-300"
+                      onClick={() => setOpenMobileEdit(true)}
+                    >
+                      <Edit className="size-4" /> <span>Edit Video</span>
+                    </button>
+                  </>
                 )}
               </div>
             </div>
@@ -385,6 +429,17 @@ const WatchPage = () => {
           </div>
         </div>
       </div>
+
+      {/* mobile */}
+      <MobileEditVideo
+        open={openMobileEdit}
+        setOpen={setOpenMobileEdit}
+        title={title}
+        description={description || ""}
+        id={video?.id || ""}
+        tag={tag || ""}
+        handleUpdate={handleUpdateVideo}
+      />
     </main>
   );
 };

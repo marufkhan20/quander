@@ -77,11 +77,8 @@ const Navbar = ({ isCollapsed }: IProps) => {
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn("text-sm", isCollapsed && "hidden")}
         >
-          <Link
-            href="/"
-            className="text-[28px] transition-all duration-300 hover:scale-110 leading-[33px] font-semibold logo"
-          >
-            quander
+          <Link href="/">
+            <img src="/images/logo.png" alt="quander" />
           </Link>
         </motion.span>
 
