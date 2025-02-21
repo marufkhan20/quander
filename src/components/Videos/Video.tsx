@@ -159,11 +159,11 @@ const Video = ({
 
 export default Video;
 
-export const VideoLoading = () => {
+export const VideoLoading = ({ className }: { className?: string }) => {
   return (
-    <div className="relative w-full h-full animate-pulse">
+    <div className={cn("relative w-full h-[250px] animate-pulse", className)}>
       {/* Skeleton for the image */}
-      <div className="bg-white-2 rounded-lg w-full h-[250px]" />
+      <div className="bg-white-2 rounded-lg w-full h-full" />
       <div className="absolute left-0 right-0 bottom-0 w-full p-[10px] flex items-center justify-between gap-4 flex-wrap">
         {/* Skeleton for title */}
         <div className="w-32 h-5 bg-black/40 rounded" />

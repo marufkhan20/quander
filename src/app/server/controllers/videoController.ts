@@ -60,71 +60,67 @@ export const getRelatedVideosController = async (c: Context) => {
     },
   });
 
-  console.log("targetVideo", targetVideo);
-
-  if (!targetVideo) {
-    return c.json({ message: "Video not found" }, 404);
-  }
-
-  // Now, find related videos based on matching attributes
-  const relatedVideos = await prisma.video.findMany({
-    where: {
-      id: { not: id },
-      // orientation: targetVideo.orientation,
-      // type: targetVideo.type,
-      // published: true, // Exclude the given video
-      OR: [
-        { title: { contains: targetVideo.title, mode: "insensitive" } },
-        {
-          tag: targetVideo.tag
-            ? { contains: targetVideo.tag, mode: "insensitive" }
-            : null,
-        },
-      ],
-    },
-    ...(limit ? { take: Number(limit) } : {}),
-    orderBy: {
-      views: "desc",
-    },
-  });
-
-  return c.json(relatedVideos);
-};
-
-export const getVideoController = async (c: Context) => {
-  try {
-    const { id } = c.req.param();
-
-    console.log("id", id);
-
-    const video = await prisma.video.findUnique({
-      where: { id },
-      include: {
-        creator: true,
-        channel: {
-          include: {
-            subscribers: true,
+  if (targetVideo) {
+    const relatedVideos = await prisma.video.findMany({
+      where: {
+        id: { not: id },
+        orientation: targetVideo.orientation,
+        type: targetVideo.type,
+        published: true,
+        OR: [
+          { title: { contains: targetVideo.title, mode: "insensitive" } },
+          {
+            tag: targetVideo.tag
+              ? { contains: targetVideo.tag, mode: "insensitive" }
+              : null,
           },
-        },
-        comments: {
-          include: {
-            author: {
-              select: {
-                name: true,
-                image: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc", // Order comments in descending order
-          },
-        },
+        ],
+      },
+      select: {
+        title: true,
+        thumbnail: true,
+        views: true,
+        id: true,
+      },
+      ...(limit ? { take: Number(limit) } : {}),
+      orderBy: {
+        views: "desc",
       },
     });
 
-    return c.json(video);
-  } catch (error) {
-    console.log(error);
-    return c.json({ error });
+    return c.json(relatedVideos);
   }
+
+  return c.json([]);
+};
+
+export const getVideoController = async (c: Context) => {
+  const { id } = c.req.param();
+
+  const video = await prisma.video.findUnique({
+    where: { id },
+    include: {
+      creator: true,
+      channel: {
+        include: {
+          subscribers: true,
+        },
+      },
+      comments: {
+        include: {
+          author: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc", // Order comments in descending order
+        },
+      },
+    },
+  });
+
+  return c.json(video);
 };

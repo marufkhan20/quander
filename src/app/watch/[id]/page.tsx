@@ -1,6 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import { useGetVideo } from "@/api/useVideos";
+import { useGetRelatedVideos, useGetVideo } from "@/api/useVideos";
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/Comments/CommentBox";
 import Breadcumb from "@/components/Shared/Breadcumb";
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/carousel";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ImageSkeleton from "@/components/ui/image";
-import Video from "@/components/Videos/Video";
+import Video, { VideoLoading } from "@/components/Videos/Video";
 import { formatNumbers } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -50,14 +50,12 @@ const WatchPage = () => {
   });
 
   // get releated videos
-  // const { data: releatedVideos, isLoading: isReleatedVideoLoading } =
-  //   useGetRelatedVideos({
-  //     queryKey: "get-related-videos",
-  //     id: id as string,
-  //     limit: 5,
-  //   });
-
-  // console.log("releatedVideos", releatedVideos);
+  const { data: releatedVideos, isLoading: isReleatedVideoLoading } =
+    useGetRelatedVideos({
+      queryKey: `get-related-videos-${id}`,
+      id: id as string,
+      limit: 5,
+    });
 
   // set comments
   useEffect(() => {
@@ -258,34 +256,59 @@ const WatchPage = () => {
           </h3>
 
           <div className="mt-[10px] hidden md:flex flex-col gap-[10px]">
-            <Video title="untitle" id="404" />
-            <Video title="untitle" id="404" />
-            <Video title="untitle" id="404" />
-            <Video title="untitle" id="404" />
-            <Video title="untitle" id="404" />
-            <Video title="untitle" id="404" />
+            {releatedVideos?.map((video) => (
+              <Video
+                key={video?.id}
+                title={video?.title}
+                id={video?.id}
+                thumbnail={video?.thumbnail}
+                views={video?.views}
+              />
+            ))}
+
+            {isReleatedVideoLoading &&
+              Array.from({ length: 5 }).map((_, idx) => (
+                <VideoLoading key={idx} className="!aspect-video h-auto" />
+              ))}
+
+            {!isReleatedVideoLoading && releatedVideos?.length === 0 && (
+              <p>No Releated Video Found!</p>
+            )}
           </div>
 
           <div className="block md:hidden mt-[10px]">
             <Carousel>
               <CarouselContent>
-                <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video title="untitle" id="404" />
-                </CarouselItem>
-                <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video title="untitle" id="404" />
-                </CarouselItem>
-                <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video title="untitle" id="404" />
-                </CarouselItem>
-                <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video title="untitle" id="404" />
-                </CarouselItem>
-                <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video title="untitle" id="404" />
-                </CarouselItem>
+                {releatedVideos?.map((video) => (
+                  <CarouselItem
+                    key={video?.id}
+                    className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5"
+                  >
+                    <Video
+                      key={video?.id}
+                      title={video?.title}
+                      id={video?.id}
+                      thumbnail={video?.thumbnail}
+                      views={video?.views}
+                    />
+                  </CarouselItem>
+                ))}
+
+                {isReleatedVideoLoading &&
+                  Array.from({ length: 5 }).map((_, idx) => (
+                    <CarouselItem
+                      key={idx}
+                      className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5"
+                    >
+                      <VideoLoading className="aspect-video h-auto" />
+                    </CarouselItem>
+                  ))}
               </CarouselContent>
             </Carousel>
+
+            {!isReleatedVideoLoading && releatedVideos?.length === 0 && (
+              <p>No Releated Video Found!</p>
+            )}
           </div>
         </div>
       </div>
