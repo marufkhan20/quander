@@ -26,6 +26,7 @@ import {
   User,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import WatchPageLoading from "./_components/Loading";
@@ -96,7 +97,10 @@ const WatchPage = () => {
               </div>
 
               <div className="mt-10 flex items-center justify-between gap-5 flex-wrap">
-                <div className="flex items-center gap-2 w-fit p-1 pr-10 transition-all cursor-pointer hover:bg-primary/40 rounded-xl">
+                <Link
+                  href={`/profile/${video?.creatorId}`}
+                  className="flex items-center gap-2 w-fit p-1 pr-10 transition-all cursor-pointer hover:bg-primary/40 rounded-xl"
+                >
                   {video?.creator?.image ? (
                     <img
                       src={video?.creator?.image}
@@ -115,7 +119,7 @@ const WatchPage = () => {
                       subscribers
                     </span>
                   </div>
-                </div>
+                </Link>
 
                 {!isAuthor ? (
                   <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300">

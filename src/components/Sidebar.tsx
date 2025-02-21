@@ -21,7 +21,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
 
   return (
     <motion.div
-      initial={{ width: "300px" }}
+      initial={{ width: "80px" }}
       animate={{ width: !isCollapsed ? "300px" : "80px" }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       className="bg-white/5 rounded-[10px] lg:block hidden h-fit text-white p-5"
