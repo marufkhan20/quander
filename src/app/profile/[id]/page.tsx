@@ -209,9 +209,9 @@ const ProfilePage = () => {
             <ul className="mt-3 mb-4 flex items-center gap-[10px] divide-x-[1px] divide-white/20 flex-wrap">
               <li className="text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">
-                  {totalSubscribers}
+                  {formatNumbers(totalSubscribers)}
                 </span>{" "}
-                subscribers
+                {totalSubscribers < 2 ? "subscriber" : "subscribers"}
               </li>
               <li className="pl-[10px] text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">

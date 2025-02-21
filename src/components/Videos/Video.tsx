@@ -68,7 +68,7 @@ const Video = ({
   return (
     <div
       // href={`/watch/${id}`}
-      className="relative cursor-pointer hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden w-full"
+      className="relative cursor-pointer hover:scale-105 rounded-lg transition-all block aspect-video duration-300 overflow-hidden w-full"
       onClick={() => router.push(`/watch/${id}`)}
     >
       {thumbnail ? (

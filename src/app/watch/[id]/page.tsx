@@ -1,5 +1,6 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
+import { useSubscribeProfile } from "@/api/useProfile";
 import { useGetRelatedVideos, useGetVideo } from "@/api/useVideos";
 import Comments from "@/components/Comments";
 import CommentBox from "@/components/Comments/CommentBox";
@@ -11,8 +12,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import CustomButton from "@/components/ui/custom-button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import ImageSkeleton from "@/components/ui/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Video, { VideoLoading } from "@/components/Videos/Video";
 import { formatNumbers } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -36,6 +43,8 @@ const WatchPage = () => {
   const [openCommentBox, setOpenCommentBox] = useState(false);
   const [comments, setComments] = useState<CommentWithAuthor[]>([]);
   const { id } = useParams();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [totalSubscribers, setTotalSubscribers] = useState(0);
 
   const { data: session } = useSession();
 
@@ -44,10 +53,28 @@ const WatchPage = () => {
     data: video,
     isLoading,
     isError,
+    refetch,
   } = useGetVideo({
     id: id as string,
     queryKey: `get-video-${id}`,
   });
+
+  useEffect(() => {
+    // check subscribe or not
+    if (video?.channel) {
+      const isSubscribed = video?.channel?.subscribers.some(
+        (subscriber) => subscriber.id === session?.user?.id
+      );
+
+      setTotalSubscribers(video?.channel?.subscribers.length);
+
+      if (isSubscribed) {
+        setIsSubscribed(true);
+      } else {
+        setIsSubscribed(false);
+      }
+    }
+  }, [session, video]);
 
   // get releated videos
   const { data: releatedVideos, isLoading: isReleatedVideoLoading } =
@@ -86,6 +113,29 @@ const WatchPage = () => {
     const newComments = [comment, ...comments];
     setComments(newComments);
   };
+
+  // subscribe profile
+  const {
+    mutate: subscribeProfile,
+    isPending: isSubscribeLoading,
+    isSuccess: isSubscribeSuccess,
+    data,
+  } = useSubscribeProfile();
+
+  useEffect(() => {
+    if (isSubscribeSuccess) {
+      if (data) {
+        if (data && "isSubscribed" in data) {
+          setIsSubscribed(data?.isSubscribed || false);
+          setTotalSubscribers((total) =>
+            data?.isSubscribed ? total + 1 : total - 1
+          );
+        }
+
+        refetch();
+      }
+    }
+  }, [data, isSubscribeSuccess, refetch]);
 
   if (!isLoading && isError) {
     return notFound();
@@ -158,16 +208,39 @@ const WatchPage = () => {
                       {video?.creator?.name}
                     </h4>
                     <span className="text-white/50">
-                      {formatNumbers(video?.channel?.subscribers?.length)}{" "}
-                      subscribers
+                      {formatNumbers(totalSubscribers)}{" "}
+                      {totalSubscribers < 2 ? "subscriber" : "subscribers"}
                     </span>
                   </div>
                 </Link>
 
                 {!isAuthor ? (
-                  <button className="flex items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300">
-                    <User /> <span>Subscribe</span>
-                  </button>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <CustomButton
+                        className="flex w-fit items-center gap-[10px] py-2 px-4 rounded-md text-black text-sm bg-primary transition-all hover:scale-105 duration-300 disabled:bg-primary/40"
+                        disabled={!session}
+                        loading={isSubscribeLoading}
+                        onClick={() =>
+                          subscribeProfile({
+                            param: {
+                              id: id as string,
+                            },
+                            json: {
+                              channelId: video?.channelId
+                                ? video?.channelId
+                                : "",
+                              userId: session?.user?.id || "",
+                            },
+                          })
+                        }
+                      >
+                        <User />{" "}
+                        <span>{isSubscribed ? "Subscribed" : "Subscribe"}</span>
+                      </CustomButton>
+                    </TooltipTrigger>
+                    {!session && <TooltipContent>Please Login</TooltipContent>}
+                  </Tooltip>
                 ) : (
                   <Dialog>
                     <DialogTrigger>
