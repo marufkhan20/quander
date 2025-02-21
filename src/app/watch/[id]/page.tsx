@@ -34,6 +34,7 @@ import WatchPageLoading from "./_components/Loading";
 const WatchPage = () => {
   const [isAuthor, setIsAuthor] = useState(false);
   const [openCommentBox, setOpenCommentBox] = useState(false);
+  const [comments, setComments] = useState<CommentWithAuthor[]>([]);
   const { id } = useParams();
 
   const { data: session } = useSession();
@@ -44,11 +45,35 @@ const WatchPage = () => {
     queryKey: `get-video-${id}`,
   });
 
+  // set comments
   useEffect(() => {
-    if (video?.creatorId && session?.user?.id) {
+    if (video?.comments) {
+      setComments(
+        video.comments.map((comment) => ({
+          ...comment,
+          createdAt: new Date(comment.createdAt),
+          updatedAt: new Date(comment.updatedAt),
+        }))
+      );
+    }
+
+    if (video?.id && session && video?.creatorId === session?.user?.id) {
       setIsAuthor(true);
     }
   }, [session, video]);
+
+  // handle delete comment
+  const handleDeleteComment = (id: string) => {
+    const newComments = comments?.filter((comment) => comment?.id !== id);
+
+    setComments(newComments);
+  };
+
+  // handle add comment
+  const handleAddComment = (comment: CommentWithAuthor) => {
+    const newComments = [comment, ...comments];
+    setComments(newComments);
+  };
   return (
     <main>
       <Breadcumb page={"Watch"} />
@@ -68,9 +93,11 @@ const WatchPage = () => {
                   {video?.title}
                 </h2>
                 <div className="flex items-center gap-[10px]">
-                  <span className="inline-block py-4 px-5 bg-white/5 rounded-lg">
-                    {video?.tag}
-                  </span>
+                  {video?.tag && (
+                    <span className="inline-block py-4 px-5 bg-white/5 rounded-lg">
+                      {video?.tag}
+                    </span>
+                  )}
                   <div className="!w-11 !h-11 rounded-full flex items-center justify-center cursor-pointer bg-[#d1f561]/5 transition-all hover:bg-primary hover:text-black text-primary">
                     <Download className="size-6" />
                   </div>
@@ -145,7 +172,8 @@ const WatchPage = () => {
                 onClick={() => setOpenCommentBox(!openCommentBox)}
               >
                 <span className="font-extrabold">
-                  Comments <span className="font-normal">(10)</span>
+                  Comments{" "}
+                  <span className="font-normal">({comments?.length})</span>
                 </span>
                 <motion.span
                   animate={{ rotate: openCommentBox ? 180 : 0 }}
@@ -166,10 +194,20 @@ const WatchPage = () => {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                       className="overflow-hidden"
                     >
-                      <CommentBox />
+                      <CommentBox
+                        handleAddComment={handleAddComment}
+                        authorId={video?.creatorId || ""}
+                      />
 
                       <div className="mt-10">
-                        <Comments />
+                        <Comments
+                          handleDelete={handleDeleteComment}
+                          comments={comments}
+                        />
+
+                        {!isLoading && comments?.length === 0 && (
+                          <p>No comment!</p>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -177,10 +215,18 @@ const WatchPage = () => {
               </div>
 
               <div className="hidden md:block">
-                <CommentBox />
+                <CommentBox
+                  handleAddComment={handleAddComment}
+                  authorId={video?.creatorId || ""}
+                />
 
                 <div className="mt-10">
-                  <Comments />
+                  <Comments
+                    handleDelete={handleDeleteComment}
+                    comments={comments}
+                  />
+
+                  {!isLoading && comments?.length === 0 && <p>No comment!</p>}
                 </div>
               </div>
             </div>

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import characterRoute from "@/app/server/routes/characterRoute";
+import commentRoute from "@/app/server/routes/commentRoute";
 import profileRoute from "@/app/server/routes/profileRoute";
 import videoRoute from "@/app/server/routes/videoRoute";
 import { Hono } from "hono";
@@ -10,7 +11,8 @@ const app = new Hono().basePath("/api");
 const routes = app
   .route("/videos", videoRoute)
   .route("/profile", profileRoute)
-  .route("/characters", characterRoute);
+  .route("/characters", characterRoute)
+  .route("/comments", commentRoute);
 
 export const GET = handle(app);
 export const POST = handle(app);

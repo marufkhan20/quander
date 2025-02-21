@@ -36,7 +36,7 @@ const FeaturedVideo = ({
       <header className="relative sm:h-[600px] sm:p-[30px] flex flex-col justify-between sm:gap-5 rounded-xl overflow-hidden">
         <img
           src={thumbnail}
-          className="sm:absolute inset-0 w-full h-full sm:rounded-xl object-cover object-bottom -z-20"
+          className="sm:absolute inset-0 w-full h-full sm:rounded-xl object-cover object-center -z-20"
           alt=""
         />
         <div className="hidden sm:block bg-[linear-gradient(261.9deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.56)_78.71%,#000_100%)] absolute inset-0 w-full h-full -z-10 rounded-xl" />

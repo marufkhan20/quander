@@ -53,7 +53,17 @@ export const getVideoController = async (c: Context) => {
         },
       },
       comments: {
-        include: { author: true },
+        include: {
+          author: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc", // Order comments in descending order
+        },
       },
     },
   });

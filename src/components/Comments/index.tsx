@@ -1,12 +1,20 @@
 import Comment from "./Comment";
 
-const Comments = () => {
+interface IProps {
+  comments: CommentWithAuthor[];
+  handleDelete: (id: string) => void;
+}
+
+const Comments = ({ comments, handleDelete }: IProps) => {
   return (
     <div className="flex flex-col gap-10">
-      <Comment key={1} />
-      <Comment key={2} />
-      <Comment key={4} />
-      <Comment key={5} />
+      {comments?.map((comment) => (
+        <Comment
+          key={comment?.id}
+          comment={comment}
+          handleDelete={handleDelete}
+        />
+      ))}
     </div>
   );
 };
