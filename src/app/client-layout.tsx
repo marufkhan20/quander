@@ -7,8 +7,7 @@ import { LayoutContext } from "@/context/LayoutContext";
 import { queryClient } from "@/lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Toaster } from "react-hot-toast";
 
 interface IProps {
@@ -16,16 +15,7 @@ interface IProps {
 }
 
 const ClientLayout = ({ children }: IProps) => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const pathname = usePathname();
-
-  useEffect(() => {
-    if (pathname !== "/") {
-      setIsCollapsed(true);
-    } else {
-      setIsCollapsed(false);
-    }
-  }, [setIsCollapsed, pathname]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   return (
     <SessionProvider refetchOnWindowFocus={false}>
       <QueryClientProvider client={queryClient}>
