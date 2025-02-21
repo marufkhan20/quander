@@ -3,12 +3,14 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 import {
+  getRelatedVideosController,
   getVideoController,
   getVideosController,
 } from "../controllers/videoController";
 
 const app = new Hono()
   .get("/", getVideosController)
+  .get("/related-videos", getRelatedVideosController)
   .get("/:id", getVideoController)
   .put(
     "/:id",

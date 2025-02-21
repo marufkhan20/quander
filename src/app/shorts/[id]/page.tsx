@@ -1,7 +1,5 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
-import Comments from "@/components/Comments";
-import CommentBox from "@/components/Comments/CommentBox";
 import Breadcumb from "@/components/Shared/Breadcumb";
 import EditVideo from "@/components/Shared/EditVideo";
 import VideoPlayer from "@/components/Shared/VideoPlayer";
@@ -147,21 +145,17 @@ const ShortsPage = () => {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <CommentBox />
+                    {/* <CommentBox /> */}
 
-                    <div className="mt-10">
-                      <Comments />
-                    </div>
+                    <div className="mt-10">{/* <Comments /> */}</div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
             <div className="hidden xl:block">
-              <CommentBox />
-              <div className="mt-10">
-                <Comments />
-              </div>
+              {/* <CommentBox /> */}
+              <div className="mt-10">{/* <Comments /> */}</div>
             </div>
           </div>
         </div>

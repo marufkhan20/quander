@@ -60,6 +60,34 @@ export const useGetVideos = ({
   return mutation;
 };
 
+export const useGetRelatedVideos = ({
+  queryKey,
+  id,
+  // sort,
+  limit,
+}: {
+  queryKey: string;
+  id: string;
+  sort?: string;
+  limit?: number;
+}) => {
+  type ResponseType = InferResponseType<
+    (typeof client.api.videos)["related-videos"]["$get"]
+  >;
+
+  const mutation = useQuery<ResponseType, Error>({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const response = await client.api.videos["related-videos"]["$get"]({
+        query: { id, limit },
+      });
+      return await response.json();
+    },
+  });
+
+  return mutation;
+};
+
 export const useUpdateVideo = () => {
   type ResponseType = InferResponseType<
     (typeof client.api.videos)[":id"]["$put"]

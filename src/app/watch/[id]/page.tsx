@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import WatchPageLoading from "./_components/Loading";
 
@@ -40,10 +40,24 @@ const WatchPage = () => {
   const { data: session } = useSession();
 
   // get video
-  const { data: video, isLoading } = useGetVideo({
+  const {
+    data: video,
+    isLoading,
+    isError,
+  } = useGetVideo({
     id: id as string,
     queryKey: `get-video-${id}`,
   });
+
+  // get releated videos
+  // const { data: releatedVideos, isLoading: isReleatedVideoLoading } =
+  //   useGetRelatedVideos({
+  //     queryKey: "get-related-videos",
+  //     id: id as string,
+  //     limit: 5,
+  //   });
+
+  // console.log("releatedVideos", releatedVideos);
 
   // set comments
   useEffect(() => {
@@ -74,6 +88,10 @@ const WatchPage = () => {
     const newComments = [comment, ...comments];
     setComments(newComments);
   };
+
+  if (!isLoading && isError) {
+    return notFound();
+  }
   return (
     <main>
       <Breadcumb page={"Watch"} />
