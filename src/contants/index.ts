@@ -96,3 +96,8 @@ export const TAGS_ITEMS: string[] = [
   "Fairy Tales",
   "Superheroes",
 ];
+
+export const Orientation = {
+  longVideos: "landscape",
+  shortVideos: "portrait",
+};

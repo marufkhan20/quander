@@ -1,7 +1,7 @@
 import MuxPlayer from "@mux/mux-player-react";
 
 interface IProps {
-  thumbnail?: string;
+  thumbnail?: string | null;
   src?: string;
 }
 

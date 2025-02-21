@@ -7,7 +7,6 @@ import Hero from "./_components/Hero";
 
 const HomePage = () => {
   const { isCollapsed } = useLayout();
-  console.log("isCollapsed from home page", isCollapsed);
   return (
     <main>
       <div

@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("SUPABASE_DIRECT_URL")
+}
+
+model Project {
+  id                String    @id @default(uuid())
+  overlays          Json?     @db.JsonB
+  aspectRatio       String?   @default("16:9")
+  durationInFrames  Int       @default(300)
+  status            String    @default("generating_images")
+  currentSceneCount Int       @default(0)
+  totalSceneCount   Int?
+  lastSavedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  version           Int       @default(0)
+  cref              Json?     @db.JsonB
+  crefImages        Json?     @db.JsonB
+  sref              String?
+  scripts           Json[]    @default([])
+  sounds            Json[]    @default([])
+  userId            String
+  user              User      @relation(fields: [userId], references: [id])
+  baseId            String?
+}
+
+model User {
+  id            String      @id @default(cuid())
+  name          String?
+  email         String?     @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  credits       Int         @default(0)
+  subExpireDate DateTime?
+  subId         String?     @unique
+  subscription  String?
+  ownedChannels Channel[]   @relation("ChannelOwner")
+  comments      Comment[]   @relation("UserComments")
+  videos        Video[]
+  subscriptions Channel[]   @relation("ChannelSubscribers")
+  Characters    Character[]
+  projects      Project[]
+  creditValue   String?
+  description   String?
+  videoTime     String?
+}
+
+model Video {
+  id          String    @id
+  title       String
+  description String?
+  url         String
+  thumbnail   String?
+  views       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  creatorId   String
+  channelId   String
+  tag         String?
+  orientation String
+  published   Boolean   @default(false)
+  comments    Comment[] @relation("VideoComments")
+  channel     Channel   @relation(fields: [channelId], references: [id])
+  creator     User      @relation(fields: [creatorId], references: [id])
+  generated   Boolean?
+  likes       Int       @default(0)
+  type        VideoType @default(regular)
+}
+
+enum VideoType {
+  challange
+  regular
+}
+
+model Channel {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     String
+  owner       User     @relation("ChannelOwner", fields: [ownerId], references: [id])
+  videos      Video[]
+  subscribers User[]   @relation("ChannelSubscribers")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  videoId   String
+  authorId  String
+  author    User     @relation("UserComments", fields: [authorId], references: [id])
+  video     Video    @relation("VideoComments", fields: [videoId], references: [id])
+}
+
+model Character {
+  id          String   @id @default(cuid())
+  picture     String
+  name        String
+  description String
+  creatorId   String
+  creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade) // Reference to User and cascade delete,
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

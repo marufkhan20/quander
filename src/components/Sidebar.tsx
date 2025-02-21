@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SIDEBAR_ITEMS } from "../contants";
@@ -47,22 +48,22 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
 
       {/* Sidebar Items */}
       <div className="mt-12 flex flex-col gap-[18px] mb-[30px]">
-        {SIDEBAR_ITEMS?.map((item, idx) => (
-          <motion.div
-            key={item?.name}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: idx * 0.1 }}
-            className="relative group w-full"
-          >
-            <NavItem
-              key={item.name}
-              icon={item?.icon}
-              label={item?.name}
-              isCollapsed={isCollapsed}
-              pathname={item?.pathname}
-            />
-          </motion.div>
+        {SIDEBAR_ITEMS?.map((item) => (
+          // <motion.div
+          //   key={item?.name}
+          //   initial={{ opacity: 0 }}
+          //   animate={{ opacity: 1 }}
+          //   transition={{ delay: idx * 0.1 }}
+          //   className="relative group w-full"
+          // >
+          <NavItem
+            key={item.name}
+            icon={item?.icon}
+            label={item?.name}
+            isCollapsed={isCollapsed}
+            pathname={item?.pathname}
+          />
+          // </motion.div>
         ))}
       </div>
 
@@ -90,11 +91,21 @@ export const NavItem = ({
   pathname: string;
   onClick?: () => void;
 }) => {
+  const { data: session } = useSession();
   const currentPath = usePathname();
   const isProfile = label === "Profile";
+  const isSignOut = label === "Sign Out";
 
-  const Wrapper: React.ElementType = isProfile ? "div" : Link;
-  const wrapperProps = isProfile ? { onClick } : { href: pathname, onClick };
+  const Wrapper: React.ElementType = isSignOut
+    ? "div"
+    : isProfile && !session
+    ? "div"
+    : Link;
+  const wrapperProps = isSignOut
+    ? { onClick }
+    : isProfile && !session
+    ? { onClick }
+    : { href: `/profile/${session?.user?.id}` };
 
   return (
     <Wrapper
@@ -111,7 +122,7 @@ export const NavItem = ({
         transition={{ duration: 0.2, ease: "easeInOut" }}
         className={cn("text-lg truncate", isCollapsed && "hidden")}
       >
-        {label}
+        {isProfile && !session ? "Sign In" : label}
       </motion.span>
     </Wrapper>
   );

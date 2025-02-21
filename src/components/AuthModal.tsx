@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+import { signIn } from "next-auth/react";
 import { DialogContent, DialogTitle } from "./ui/dialog";
 
 const AuthModal = () => {
@@ -36,7 +38,11 @@ const AuthModalContent = ({
           Sign in to your account
         </h3>
         <p>Link your Google account access all features.</p>
-        <button className="w-full py-[14px] px-5 text-center bg-primary text-black font-semibold text-lg rounded-xl transition-all hover:scale-105 mt-7">
+        <button
+          className="w-full py-[14px] px-5 text-center bg-primary text-black font-semibold text-lg rounded-xl transition-all hover:scale-105 mt-7 flex items-center justify-center gap-[14px]"
+          onClick={() => signIn("google")}
+        >
+          <img src="/images/icons/google.svg" className="size-5" alt="google" />
           Continue with Google
         </button>
 

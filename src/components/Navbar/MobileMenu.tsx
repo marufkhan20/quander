@@ -1,7 +1,7 @@
 import { SIDEBAR_ITEMS } from "@/contants";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { MoveRight, X } from "lucide-react";
+import { LogOut, MoveRight, X } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +18,8 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
   const [mobileCreateForm, setMobileCreateForm] = useState(false);
   const [openAuth, setOpenAuth] = useState(false);
   const pathname = usePathname();
+
+  const { data: session } = useSession();
 
   useEffect(() => {
     setOpenMobileMenu(false);
@@ -55,23 +57,31 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
             </div>
 
             <div className="mt-10 flex flex-col gap-[18px]">
-              {SIDEBAR_ITEMS?.map((item, idx) => (
-                <motion.div
-                  key={item?.name}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="relative group w-full"
-                >
-                  <NavItem
-                    key={item.name}
-                    icon={item?.icon}
-                    label={item?.name}
-                    pathname={item?.pathname}
-                    onClick={() => item.name === "Profile" && setOpenAuth(true)}
-                  />
-                </motion.div>
+              {SIDEBAR_ITEMS?.map((item) => (
+                // <motion.div
+                //   key={item?.name}
+                //   initial={{ opacity: 0 }}
+                //   animate={{ opacity: 1 }}
+                //   transition={{ delay: idx * 0.1 }}
+                //   className="relative group w-full"
+                // >
+                <NavItem
+                  key={item.name}
+                  icon={item?.icon}
+                  label={item?.name}
+                  pathname={item?.pathname}
+                  onClick={() => item.name === "Profile" && setOpenAuth(true)}
+                />
               ))}
+
+              {session && (
+                <NavItem
+                  icon={LogOut}
+                  label="Sign Out"
+                  onClick={() => signOut()}
+                  pathname=""
+                />
+              )}
             </div>
 
             <button

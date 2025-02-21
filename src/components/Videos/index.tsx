@@ -1,3 +1,6 @@
+"use client";
+import { useGetVideos } from "@/api/useVideos";
+import { Orientation } from "@/contants";
 import { ReactNode } from "react";
 import {
   Carousel,
@@ -6,13 +9,20 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "../ui/carousel";
-import Video from "./Video";
+import Video, { VideoLoading } from "./Video";
 
 interface IProps {
   title?: string | ReactNode;
 }
 
 const Videos = ({ title }: IProps) => {
+  const { data: videos, isLoading } = useGetVideos({
+    orientation: Orientation.longVideos,
+    type: "regular",
+    queryKey: "get-home-videos",
+    published: true,
+    sort: "desc",
+  });
   return (
     <section className="mt-6 relative">
       <Carousel>
@@ -28,27 +38,42 @@ const Videos = ({ title }: IProps) => {
 
         <div className="mt-3">
           <CarouselContent>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
-            <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-              <Video />
-            </CarouselItem>
+            {videos &&
+              videos?.map((video) => (
+                <CarouselItem
+                  key={video?.id}
+                  className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5"
+                >
+                  <Video
+                    thumbnail={video?.thumbnail}
+                    id={video?.id}
+                    title={video?.title}
+                    views={video?.views}
+                  />
+                </CarouselItem>
+              ))}
+
+            {isLoading && (
+              <>
+                {Array.from({ length: 6 }).map((_, idx) => (
+                  <CarouselItem
+                    key={idx}
+                    className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5"
+                  >
+                    <VideoLoading />
+                  </CarouselItem>
+                ))}
+              </>
+            )}
           </CarouselContent>
         </div>
       </Carousel>
+
+      {!isLoading && !videos && (
+        <h2 className="text-white/60 text-base font-medium">
+          No Video Found!!
+        </h2>
+      )}
     </section>
   );
 };
