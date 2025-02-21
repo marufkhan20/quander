@@ -1,8 +1,5 @@
 import prisma from "@/app/server/db/prisma";
-import { profileSchema } from "@/schemas/profileSchema";
 import { Context } from "hono";
-import { z } from "zod";
-type ProfileUpdateInput = z.infer<typeof profileSchema>;
 
 export const getProfileByIdController = async (c: Context) => {
   const { id } = c.req.param();
@@ -44,18 +41,18 @@ export const getProfileByIdController = async (c: Context) => {
   return c.json({ ...creator, totalLikes: totalLikes._sum.likes || 0 });
 };
 
-export const updateProfileController = async (c: Context) => {
-  const { id } = c.req.param();
-  const { firstName, lastName, description, image } = c.req.valid("json");
+// export const updateProfileController = async (c: Context) => {
+//   const { id } = c.req.param();
+//   const { firstName, lastName, description, image } = c.req.valid("json");
 
-  const updatedCreator = await prisma.user.update({
-    where: { id },
-    data: {
-      name: firstName + " " + lastName,
-      description,
-      image,
-    },
-  });
+//   const updatedCreator = await prisma.user.update({
+//     where: { id },
+//     data: {
+//       name: firstName + " " + lastName,
+//       description,
+//       image,
+//     },
+//   });
 
-  return c.json(updatedCreator);
-};
+//   return c.json(updatedCreator);
+// };

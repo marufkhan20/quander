@@ -25,8 +25,9 @@ import {
   Play,
   User,
 } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import WatchPageLoading from "./_components/Loading";
 
 const WatchPage = () => {
@@ -34,11 +35,19 @@ const WatchPage = () => {
   const [openCommentBox, setOpenCommentBox] = useState(false);
   const { id } = useParams();
 
+  const { data: session } = useSession();
+
   // get video
   const { data: video, isLoading } = useGetVideo({
     id: id as string,
     queryKey: `get-video-${id}`,
   });
+
+  useEffect(() => {
+    if (video?.creatorId && session?.user?.id) {
+      setIsAuthor(true);
+    }
+  }, [session, video]);
   return (
     <main>
       <Breadcumb page={"Watch"} />
@@ -181,31 +190,31 @@ const WatchPage = () => {
           </h3>
 
           <div className="mt-[10px] hidden md:flex flex-col gap-[10px]">
-            <Video />
-            <Video />
-            <Video />
-            <Video />
-            <Video />
-            <Video />
+            <Video title="untitle" id="404" />
+            <Video title="untitle" id="404" />
+            <Video title="untitle" id="404" />
+            <Video title="untitle" id="404" />
+            <Video title="untitle" id="404" />
+            <Video title="untitle" id="404" />
           </div>
 
           <div className="block md:hidden mt-[10px]">
             <Carousel>
               <CarouselContent>
                 <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video />
+                  <Video title="untitle" id="404" />
                 </CarouselItem>
                 <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video />
+                  <Video title="untitle" id="404" />
                 </CarouselItem>
                 <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video />
+                  <Video title="untitle" id="404" />
                 </CarouselItem>
                 <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video />
+                  <Video title="untitle" id="404" />
                 </CarouselItem>
                 <CarouselItem className="basis-1/1.3 sm:basis-1/2.5 xl:basis-1/3.5">
-                  <Video />
+                  <Video title="untitle" id="404" />
                 </CarouselItem>
               </CarouselContent>
             </Carousel>

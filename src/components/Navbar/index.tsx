@@ -45,7 +45,10 @@ const Navbar = ({ isCollapsed }: IProps) => {
   });
 
   // get profile info
-  const { refetch, data } = useGetProfile(session?.user?.id || "");
+  const { refetch, data } = useGetProfile(
+    session?.user?.id || "",
+    "profile-info"
+  );
 
   useEffect(() => {
     if (session && session.user) {

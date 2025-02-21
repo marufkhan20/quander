@@ -1,5 +1,5 @@
 import prisma from "@/app/server/db/prisma";
-import { VideoType } from "@prisma/client";
+import { Prisma, VideoType } from "@prisma/client";
 import { Context } from "hono";
 
 export const getVideosController = async (c: Context) => {
@@ -31,9 +31,13 @@ export const getVideosController = async (c: Context) => {
     },
   });
 
-  // console.log("videos", videos);
+  type VideoWithOptionalCreator = Prisma.VideoGetPayload<{
+    include: {
+      creator?: { select: { name: true; image: true } };
+    };
+  }>;
 
-  return c.json(videos);
+  return c.json(videos as VideoWithOptionalCreator[]);
 };
 
 export const getVideoController = async (c: Context) => {
@@ -45,11 +49,11 @@ export const getVideoController = async (c: Context) => {
       creator: true,
       channel: {
         include: {
-          subscribers: true, // Include the subscribers of the channel
+          subscribers: true,
         },
       },
       comments: {
-        include: { author: true }, // Include the author details for each comment
+        include: { author: true },
       },
     },
   });

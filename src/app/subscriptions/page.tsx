@@ -1,3 +1,4 @@
+"use client";
 import ShortVideos from "@/components/ShortVideos";
 import {
   Carousel,

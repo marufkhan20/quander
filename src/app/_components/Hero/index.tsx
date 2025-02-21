@@ -13,8 +13,6 @@ const Hero = () => {
     limit: 2,
     userInfo: true,
   });
-
-  console.log("featured video", featuredVideos);
   return (
     <>
       <Carousel>
@@ -27,8 +25,8 @@ const Hero = () => {
               likes={video?.likes}
               views={video?.views}
               title={video?.title}
-              userImage={video?.creator?.image}
-              userName={video?.creator?.name}
+              userImage={video?.creator?.image || ""}
+              userName={video?.creator?.name || ""}
               key={video?.id}
             />
           ))}

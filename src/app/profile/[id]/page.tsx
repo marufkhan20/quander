@@ -175,11 +175,12 @@ const ProfilePage = () => {
   useEffect(() => {
     if (isSubscribeSuccess) {
       if (data) {
-        setIsSubscribed(data?.isSubscribed || false);
-
-        setTotalSubscribers((total) =>
-          data?.isSubscribed ? total + 1 : total - 1
-        );
+        if (data && "isSubscribed" in data) {
+          setIsSubscribed(data?.isSubscribed || false);
+          setTotalSubscribers((total) =>
+            data?.isSubscribed ? total + 1 : total - 1
+          );
+        }
 
         refetchProfileInfo();
       }

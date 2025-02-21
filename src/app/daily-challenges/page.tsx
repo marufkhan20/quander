@@ -13,7 +13,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Video from "@/components/Videos/Video";
 import { ChevronDownIcon, Info, Plus } from "lucide-react";
 import { useState } from "react";
 import ChallengeItem from "./_components/ChallengeItem";
@@ -96,7 +95,7 @@ const DailyChallenges = () => {
           </h2>
         </div>
 
-        <Carousel>
+        {/* <Carousel>
           <div>
             <CarouselContent>
               <CarouselItem className="basis-1/1.2 sm:basis-1/2 lg:basis-1/3 2xl:basis-1/4 ">
@@ -141,7 +140,7 @@ const DailyChallenges = () => {
               </CarouselItem>
             </CarouselContent>
           </div>
-        </Carousel>
+        </Carousel> */}
       </section>
 
       {/* All Challenge Submissions */}
@@ -175,6 +174,7 @@ const DailyChallenges = () => {
         </div>
 
         <div className="mt-3 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[10px]">
+          {/* <Video />
           <Video />
           <Video />
           <Video />
@@ -185,8 +185,7 @@ const DailyChallenges = () => {
           <Video />
           <Video />
           <Video />
-          <Video />
-          <Video />
+          <Video /> */}
         </div>
       </section>
     </main>
