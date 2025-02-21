@@ -51,6 +51,7 @@ model User {
   creditValue   String?
   description   String?
   videoTime     String?
+  challengeWin  Int         @default(0)
 }
 
 model Video {

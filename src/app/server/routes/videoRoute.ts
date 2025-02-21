@@ -30,8 +30,6 @@ const app = new Hono()
         "json"
       );
 
-      console.log("add view", addView);
-
       const updatedVideo = await prisma.video.update({
         where: { id },
         data: {
