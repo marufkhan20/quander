@@ -177,7 +177,11 @@ const WatchPage = () => {
         ) : (
           <div className="flex-1">
             <div>
-              <VideoPlayer thumbnail={video?.thumbnail} src={video?.url} />
+              <VideoPlayer
+                setViews={setViews}
+                thumbnail={video?.thumbnail}
+                src={video?.url}
+              />
             </div>
 
             <div className="mt-8 pb-10 border-b border-white/10">

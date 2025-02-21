@@ -21,15 +21,26 @@ const app = new Hono()
         title: z.string().optional(),
         description: z.string().optional(),
         tag: z.string().optional(),
+        addView: z.boolean().optional(),
       })
     ),
     async (c) => {
       const { id } = c.req.param();
-      const body = await c.req.valid("json");
+      const { description, published, tag, title, addView } = await c.req.valid(
+        "json"
+      );
+
+      console.log("add view", addView);
 
       const updatedVideo = await prisma.video.update({
         where: { id },
-        data: body,
+        data: {
+          description,
+          published,
+          tag,
+          title,
+          ...(addView ? { views: { increment: 1 } } : {}),
+        },
       });
 
       return c.json(updatedVideo);
