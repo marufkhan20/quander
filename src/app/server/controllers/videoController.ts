@@ -61,6 +61,8 @@ export const getRelatedVideosController = async (c: Context) => {
   });
 
   if (targetVideo) {
+    const titleKeywords = targetVideo.title.split(" ").slice(0, 2).join(" ");
+
     const relatedVideos = await prisma.video.findMany({
       where: {
         id: { not: id },
@@ -68,12 +70,8 @@ export const getRelatedVideosController = async (c: Context) => {
         type: targetVideo.type,
         published: true,
         OR: [
-          { title: { contains: targetVideo.title, mode: "insensitive" } },
-          {
-            tag: targetVideo.tag
-              ? { contains: targetVideo.tag, mode: "insensitive" }
-              : null,
-          },
+          { title: { contains: titleKeywords, mode: "insensitive" } },
+          ...(targetVideo.tag ? [{ tag: targetVideo.tag }] : []),
         ],
       },
       select: {
