@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { SIDEBAR_ITEMS } from "@/contants";
 import { cn } from "@/lib/utils";
 import { LogOut, MoveRight, X } from "lucide-react";
@@ -46,7 +47,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
                 href="/"
                 className="text-[28px] transition-all duration-300 hover:scale-110 leading-[33px] font-semibold logo"
               >
-                quander
+                <img src="/images/logo.png" alt="quander" />
               </Link>
               <div>
                 <X

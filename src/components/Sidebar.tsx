@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import { cn } from "@/lib/utils";
@@ -37,11 +38,8 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn("text-sm", isCollapsed && "hidden")}
         >
-          <Link
-            href="/"
-            className="font-semibold text-[28px] leading-[33px] logo"
-          >
-            quander
+          <Link href="/">
+            <img src="/images/logo.png" alt="quander" />
           </Link>
         </motion.span>
       </div>

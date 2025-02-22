@@ -1,6 +1,6 @@
-import prisma from "@/app/server/db/prisma";
 import { Prisma, VideoType } from "@prisma/client";
 import { Context } from "hono";
+import prisma from "../db/prisma";
 
 export const getVideosController = async (c: Context) => {
   try {
@@ -60,71 +60,96 @@ export const getRelatedVideosController = async (c: Context) => {
     },
   });
 
-  console.log("targetVideo", targetVideo);
+  if (targetVideo) {
+    const titleKeywords = targetVideo.title.split(" ").slice(0, 2).join(" ");
 
-  if (!targetVideo) {
-    return c.json({ message: "Video not found" }, 404);
-  }
-
-  // Now, find related videos based on matching attributes
-  const relatedVideos = await prisma.video.findMany({
-    where: {
-      id: { not: id },
-      // orientation: targetVideo.orientation,
-      // type: targetVideo.type,
-      // published: true, // Exclude the given video
-      OR: [
-        { title: { contains: targetVideo.title, mode: "insensitive" } },
-        {
-          tag: targetVideo.tag
-            ? { contains: targetVideo.tag, mode: "insensitive" }
-            : null,
-        },
-      ],
-    },
-    ...(limit ? { take: Number(limit) } : {}),
-    orderBy: {
-      views: "desc",
-    },
-  });
-
-  return c.json(relatedVideos);
-};
-
-export const getVideoController = async (c: Context) => {
-  try {
-    const { id } = c.req.param();
-
-    console.log("id", id);
-
-    const video = await prisma.video.findUnique({
-      where: { id },
-      include: {
-        creator: true,
-        channel: {
-          include: {
-            subscribers: true,
-          },
-        },
-        comments: {
-          include: {
-            author: {
-              select: {
-                name: true,
-                image: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: "desc", // Order comments in descending order
-          },
-        },
+    const relatedVideos = await prisma.video.findMany({
+      where: {
+        id: { not: id },
+        orientation: targetVideo.orientation,
+        type: targetVideo.type,
+        published: true,
+        OR: [
+          { title: { contains: titleKeywords, mode: "insensitive" } },
+          ...(targetVideo.tag ? [{ tag: targetVideo.tag }] : []),
+        ],
+      },
+      select: {
+        title: true,
+        thumbnail: true,
+        views: true,
+        id: true,
+      },
+      ...(limit ? { take: Number(limit) } : {}),
+      orderBy: {
+        views: "desc",
       },
     });
 
-    return c.json(video);
-  } catch (error) {
-    console.log(error);
-    return c.json({ error });
+    return c.json(relatedVideos);
   }
+
+  return c.json([]);
+};
+
+export const getVideoController = async (c: Context) => {
+  const { id } = c.req.param();
+
+  const video = await prisma.video.findUnique({
+    where: { id },
+    include: {
+      creator: true,
+      channel: {
+        include: {
+          subscribers: true,
+        },
+      },
+      comments: {
+        include: {
+          author: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc", // Order comments in descending order
+        },
+      },
+    },
+  });
+
+  let previousVideoId;
+  let nextVideoId;
+
+  if (video) {
+    const previousVideo = await prisma.video.findFirst({
+      where: {
+        createdAt: { lt: video.createdAt },
+        orientation: video?.orientation,
+        published: true,
+        generated: true,
+      }, // Get the previous video
+      orderBy: { createdAt: "desc" },
+    });
+
+    const nextVideo = await prisma.video.findFirst({
+      where: {
+        createdAt: { gt: video.createdAt },
+        orientation: video?.orientation,
+        published: true,
+        generated: true,
+      }, // Get the next video
+      orderBy: { createdAt: "asc" },
+    });
+
+    previousVideoId = previousVideo?.id;
+    nextVideoId = nextVideo?.id;
+
+    console.log("previous id", previousVideo?.id);
+    console.log("next id", nextVideo?.id);
+  }
+
+  return c.json({ ...video, previousVideoId, nextVideoId });
 };

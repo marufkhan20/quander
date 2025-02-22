@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+
 import Breadcumb from "@/components/Shared/Breadcumb";
 import EditVideo from "@/components/Shared/EditVideo";
 import VideoPlayer from "@/components/Shared/VideoPlayer";
@@ -20,7 +20,7 @@ import { useState } from "react";
 
 const ShortsPage = () => {
   const isAuthor = false;
-  const [openCommentBox, setOpenCommentBox] = useState(false);
+  const [openCommentBox, setOpenCommentBox] = useState(true);
   return (
     <main>
       <Breadcumb page={"Shorts"} />

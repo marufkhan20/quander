@@ -31,26 +31,28 @@ model Project {
 }
 
 model User {
-  id            String      @id @default(cuid())
+  id            String         @id @default(cuid())
   name          String?
-  email         String?     @unique
+  email         String?        @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  credits       Int         @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  credits       Int            @default(0)
   subExpireDate DateTime?
-  subId         String?     @unique
+  subId         String?        @unique
   subscription  String?
-  ownedChannels Channel[]   @relation("ChannelOwner")
-  comments      Comment[]   @relation("UserComments")
+  ownedChannels Channel[]      @relation("ChannelOwner")
+  comments      Comment[]      @relation("UserComments")
   videos        Video[]
-  subscriptions Channel[]   @relation("ChannelSubscribers")
+  subscriptions Channel[]      @relation("ChannelSubscribers")
   Characters    Character[]
   projects      Project[]
   creditValue   String?
   description   String?
   videoTime     String?
+  challengeWin  Int            @default(0)
+  Notification  Notification[]
 }
 
 model Video {
@@ -71,7 +73,7 @@ model Video {
   channel     Channel   @relation(fields: [channelId], references: [id])
   creator     User      @relation(fields: [creatorId], references: [id])
   generated   Boolean?
-  likes       Int       @default(0)
+  likes       String[]  @default([]) // Store user IDs who liked the video
   type        VideoType @default(regular)
 }
 
@@ -113,4 +115,17 @@ model Character {
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  icon      String?
+  read      Boolean  @default(false)
+  image     String?
+  link      String?
+  creatorId String
+  creator   User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

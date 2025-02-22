@@ -88,6 +88,28 @@ export const useGetRelatedVideos = ({
   return mutation;
 };
 
+export const useLikeVideo = () => {
+  type ResponseType = InferResponseType<
+    (typeof client.api.videos)["like-video"][":id"]["$put"]
+  >;
+
+  type RequestType = InferRequestType<
+    (typeof client.api.videos)["like-video"][":id"]["$put"]
+  >;
+
+  const mutation = useMutation<ResponseType, Error, RequestType>({
+    mutationKey: ["like-video"],
+    mutationFn: async (data) => {
+      const response = await client.api.videos["like-video"][":id"]["$put"](
+        data
+      );
+      return await response.json();
+    },
+  });
+
+  return mutation;
+};
+
 export const useUpdateVideo = () => {
   type ResponseType = InferResponseType<
     (typeof client.api.videos)[":id"]["$put"]

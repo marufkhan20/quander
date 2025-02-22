@@ -193,7 +193,7 @@ const ProfilePage = () => {
   return (
     <main>
       {/* profile details */}
-      <section className="bg-white-2 p-5 sm:p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-col lg:flex-row">
+      <section className="bg-white-2 w-full p-5 sm:p-[30px] rounded-[10px] flex items-center justify-between gap-5 flex-col lg:flex-row">
         <div className="flex w-full md:flex-1 md:items-center gap-5">
           {profilePic ? (
             <img
@@ -204,31 +204,38 @@ const ProfilePage = () => {
           ) : (
             <ImageSkeleton className="size-[60px] sm:size-[80px] md:size-[120px] rounded-[10px]" />
           )}
-          <div>
+          <div className="flex-1">
             <h3 className="text-lg md:text-[22px] font-semibold">{name}</h3>
             <ul className="mt-3 mb-4 flex items-center gap-[10px] divide-x-[1px] divide-white/20 flex-wrap">
               <li className="text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">
-                  {totalSubscribers}
+                  {formatNumbers(totalSubscribers)}
                 </span>{" "}
-                subscribers
+                {totalSubscribers < 2 ? "subscriber" : "subscribers"}
               </li>
               <li className="pl-[10px] text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">
                   {profileInfo?.subscriptions?.length}
                 </span>{" "}
-                subscriptions
+                {profileInfo?.subscriptions &&
+                profileInfo?.subscriptions?.length < 2
+                  ? "subscription"
+                  : "subscriptions"}
               </li>
               <li className="pl-[10px] text-white/80 text-xs md:text-base">
                 <span className="font-semibold text-white">
                   {formatNumbers(profileInfo?.totalLikes || null)}
                 </span>{" "}
-                likes
+                {profileInfo?.totalLikes && profileInfo?.totalLikes < 2
+                  ? "like"
+                  : "likes"}
               </li>
             </ul>
-            <p className="md:w-[70%] text-white/80 text-xs md:text-base">
-              {description || "No description"}
-            </p>
+            <div className="md:w-[50%]">
+              <p className="text-white/80 text-xs md:text-base">
+                {description || "No description"}
+              </p>
+            </div>
           </div>
         </div>
         <div className="w-full lg:w-auto flex lg:flex-col justify-between lg:h-[120px] lg:items-end flex-wrap gap-y-4">
@@ -236,7 +243,9 @@ const ProfilePage = () => {
             <Trophy className="size-4 text-[#fdac00]" />
             <span>
               Daily Challenges Wins:{" "}
-              <span className="text-white font-semibold">3</span>
+              <span className="text-white font-semibold">
+                {profileInfo?.challengeWin}
+              </span>
             </span>
           </p>
 
@@ -502,6 +511,7 @@ const ProfilePage = () => {
                       published={video.published}
                       isAuthor={isAuthor}
                       refetch={refetch}
+                      url={video?.url}
                     />
                   ))
                 )}

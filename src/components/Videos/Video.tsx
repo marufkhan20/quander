@@ -29,6 +29,7 @@ interface IProps {
   id: string;
   published?: boolean;
   refetch?: () => void;
+  url?: string;
 }
 
 const Video = ({
@@ -39,6 +40,7 @@ const Video = ({
   id,
   published,
   refetch,
+  url,
 }: IProps) => {
   const router = useRouter();
 
@@ -65,10 +67,20 @@ const Video = ({
       toast.success("Video deleted successfully.");
     }
   }, [isDeleteSuccess, isDeleteVideo, refetch]);
+
+  // download video
+  const downloadVdieo = () => {
+    const link = document.createElement("a");
+    link.href = url || "";
+    link.download = `${title?.replace(" ", "-").toLowerCase()}.mp4`; // Suggested filename
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <div
       // href={`/watch/${id}`}
-      className="relative cursor-pointer hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden w-full"
+      className="relative cursor-pointer hover:scale-105 rounded-lg transition-all block aspect-video duration-300 overflow-hidden w-full"
       onClick={() => router.push(`/watch/${id}`)}
     >
       {thumbnail ? (
@@ -128,7 +140,10 @@ const Video = ({
                   <Eye /> <span>Show in profile</span>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem className="cursor-pointer bg-transparent text-white hover:!bg-primary">
+              <DropdownMenuItem
+                className="cursor-pointer bg-transparent text-white hover:!bg-primary"
+                onClick={downloadVdieo}
+              >
                 <Download /> <span>Download video</span>
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -159,11 +174,11 @@ const Video = ({
 
 export default Video;
 
-export const VideoLoading = () => {
+export const VideoLoading = ({ className }: { className?: string }) => {
   return (
-    <div className="relative w-full h-full animate-pulse">
+    <div className={cn("relative w-full h-[250px] animate-pulse", className)}>
       {/* Skeleton for the image */}
-      <div className="bg-white-2 rounded-lg w-full h-[250px]" />
+      <div className="bg-white-2 rounded-lg w-full h-full" />
       <div className="absolute left-0 right-0 bottom-0 w-full p-[10px] flex items-center justify-between gap-4 flex-wrap">
         {/* Skeleton for title */}
         <div className="w-32 h-5 bg-black/40 rounded" />

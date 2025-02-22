@@ -1,5 +1,5 @@
-import prisma from "@/app/server/db/prisma";
 import { Context } from "hono";
+import prisma from "../db/prisma";
 
 export const getProfileByIdController = async (c: Context) => {
   const { id } = c.req.param();
@@ -33,12 +33,18 @@ export const getProfileByIdController = async (c: Context) => {
     });
   }
 
-  const totalLikes = await prisma.video.aggregate({
+  const videos = await prisma.video.findMany({
     where: { creatorId: id },
-    _sum: { likes: true },
+    select: { likes: true },
   });
 
-  return c.json({ ...creator, totalLikes: totalLikes._sum.likes || 0 });
+  // Calculate total likes by summing up the length of all likes arrays
+  const totalLikes = videos.reduce(
+    (sum, video) => sum + (video.likes?.length || 0),
+    0
+  );
+
+  return c.json({ ...creator, totalLikes });
 };
 
 // export const updateProfileController = async (c: Context) => {

@@ -4,7 +4,7 @@ import { useGetProfile } from "@/api/useProfile";
 import { cn } from "@/lib/utils";
 import { useProfileStore } from "@/store/useProfileStore";
 import { motion } from "framer-motion";
-import { Bell, ChevronDown, LogOut, Menu, User } from "lucide-react";
+import { ChevronDown, LogOut, Menu, User } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -21,9 +21,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import ImageSkeleton from "../ui/image";
 import CreateVideoForm from "./CreateVideoForm";
 import FilterSelect from "./FilterSelect";
 import MobileMenu from "./MobileMenu";
+import Notifications from "./Notifications";
 
 interface IProps {
   isCollapsed: boolean;
@@ -35,7 +37,7 @@ const Navbar = ({ isCollapsed }: IProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { data: session } = useSession({
+  const { data: session, status } = useSession({
     required: false,
     onUnauthenticated() {
       if (pathname === "/create-video") {
@@ -77,11 +79,8 @@ const Navbar = ({ isCollapsed }: IProps) => {
           transition={{ duration: 0.2, ease: "easeInOut" }}
           className={cn("text-sm", isCollapsed && "hidden")}
         >
-          <Link
-            href="/"
-            className="text-[28px] transition-all duration-300 hover:scale-110 leading-[33px] font-semibold logo"
-          >
-            quander
+          <Link href="/">
+            <img src="/images/logo.png" alt="quander" />
           </Link>
         </motion.span>
 
@@ -99,22 +98,27 @@ const Navbar = ({ isCollapsed }: IProps) => {
         </Drawer>
 
         {/* Notifications */}
-        <button className="hidden lg:flex size-[46px] bg-white/5 rounded-[8px] items-center justify-center cursor-pointer bg-nav-item transition-all relative">
-          <Bell className="size-[18px] text-primary" />
-          <div className="absolute size-[6px] rounded-full top-2 right-2 bg-[#df3840]" />
-        </button>
+        {session?.user?.id && <Notifications />}
 
         {/* Profile */}
-        {session ? (
+        {status === "loading" ? (
+          <div className="h-[46px] w-[100px] bg-white/10 rounded-[8px] flex items-center gap-2 pr-2 animate-pulse">
+            <div className="h-full w-[60px] bg-white/20 rounded-[8px] m-[2px]" />
+          </div>
+        ) : session ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <div className="h-[46px] bg-white/5 rounded-[8px] flex items-center gap-2 pr-2 cursor-pointer text-white hover:text-primary transition-all">
-                <img
-                  src={image || "/images/profile.jpg"}
-                  className="h-full object-contain rounded-[8px] m-[2px]"
-                  alt=""
-                />
-                <ChevronDown className="size-5" />
+              <div className="h-[46px] bg-white/5 rounded-[8px] flex items-center gap-2 pr-2 cursor-pointer hover:bg-white/10 active:bg-white/15 transition-all">
+                {image ? (
+                  <img
+                    src={image}
+                    className="h-full object-contain rounded-[8px] m-[2px]"
+                    alt=""
+                  />
+                ) : (
+                  <ImageSkeleton className="h-[46px] rounded-[8px] m-[2px] w-10" />
+                )}
+                <ChevronDown className="size-5 text-primary" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -133,8 +137,8 @@ const Navbar = ({ isCollapsed }: IProps) => {
               <DropdownMenuSeparator className="bg-slate-800" />
               <DropdownMenuGroup>
                 <Link href={`/profile/${session?.user?.id || ""}`}>
-                  <DropdownMenuItem className="focus:bg-slate-800 focus:text-slate-100 cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
+                  <DropdownMenuItem className="flex items-center gap-2 p-3 focus:bg-slate-800 focus:text-slate-100 cursor-pointer">
+                    <User className="size-4" />
                     <span>Profile</span>
                     {/* <span className="ml-auto text-xs text-slate-400">
                       400 connections
@@ -144,10 +148,10 @@ const Navbar = ({ isCollapsed }: IProps) => {
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="bg-slate-800" />
               <DropdownMenuItem
-                className="text-red-400 focus:bg-slate-800 focus:text-red-400 cursor-pointer"
+                className="flex items-center gap-2 p-3 text-red-400 focus:bg-slate-800 focus:text-red-400 cursor-pointer"
                 onClick={() => signOut()}
               >
-                <LogOut className="mr-2 h-4 w-4" />
+                <LogOut className="size-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>

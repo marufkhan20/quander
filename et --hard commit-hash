@@ -1,0 +1,31 @@
+[33m0584b65[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to origin/main
+[33m56df0c3[m HEAD@{1}: commit: Implement notification functionality
+[33mcab6cc1[m[33m ([m[1;31mananya/main[m[33m)[m HEAD@{2}: commit: Fix video player props issue
+[33mbe28f20[m HEAD@{3}: commit: update user schema
+[33m78633a1[m HEAD@{4}: commit: Add view count functionality
+[33m30814bb[m HEAD@{5}: commit: Improve releated videos query
+[33maf26a22[m HEAD@{6}: commit: Add edit video functionality
+[33m2c7028b[m HEAD@{7}: commit: Add subscribe functionality in watch page
+[33mab0bb49[m HEAD@{8}: commit: Create releated videos api
+[33m0584b65[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{9}: commit: Fix build issues
+[33m1bfabbc[m HEAD@{10}: commit: Add comment functionality
+[33m5e31ccb[m HEAD@{11}: Branch: renamed refs/heads/main to refs/heads/main
+[33m5e31ccb[m HEAD@{13}: commit: Watch page add link to profile page
+[33mca5e757[m HEAD@{14}: commit: Hide scrollbar and collapsed sidebar
+[33m6497ddf[m HEAD@{15}: commit: Change base url static to dynamic
+[33m246047d[m HEAD@{16}: commit: Fix build issues
+[33m68fe664[m HEAD@{17}: commit: Develop profile and videos api
+[33m1a566ce[m HEAD@{18}: commit: Fix pricing url
+[33m81b43b8[m HEAD@{19}: Branch: renamed refs/heads/master to refs/heads/main
+[33m81b43b8[m HEAD@{21}: commit: Responsive modals
+[33m1b9c482[m HEAD@{22}: commit: Responsive pricing page
+[33m9f47e2d[m HEAD@{23}: commit: Responsive daily challenges page
+[33m47805f7[m HEAD@{24}: commit: Responsive subscriptions page
+[33m5025c34[m HEAD@{25}: commit: Responsive profile page
+[33m72bd04c[m HEAD@{26}: commit: Responsive watch pages
+[33ma5afb9c[m HEAD@{27}: commit: Responsive home page
+[33mb076b88[m HEAD@{28}: commit: Complete daily challenges page design
+[33me02c7cd[m HEAD@{29}: commit: Complete profile page and subscriptions page design
+[33mfbe5016[m HEAD@{30}: commit: Watch pages design completed
+[33m670fd7c[m HEAD@{31}: commit: Home page
+[33m30d2513[m HEAD@{32}: commit (initial): Initial commit from Create Next App
