@@ -65,7 +65,7 @@ const ShortVideo = ({
   }, [isDeleteSuccess, isDeleteVideo, refetch]);
   return (
     <div
-      onClick={() => router.push(`/shorts/${id}?orientation=portrait`)}
+      onClick={() => router.push(`/watch/${id}?orientation=portrait`)}
       className="relative hover:scale-105 rounded-lg transition-all block duration-300 overflow-hidden cursor-pointer"
     >
       <img

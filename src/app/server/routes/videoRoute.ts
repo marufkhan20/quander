@@ -52,7 +52,7 @@ const app = new Hono()
           icon: "",
           link:
             video?.orientation === "portrait"
-              ? `/shorts/${video?.id}`
+              ? `/watch/${video?.id}?orientation=portrait`
               : `/watch/${video?.id}`,
         });
       }

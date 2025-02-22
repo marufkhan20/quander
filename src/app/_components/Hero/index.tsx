@@ -22,7 +22,7 @@ const Hero = () => {
               thumbnail={video?.thumbnail || ""}
               description={video?.description || ""}
               id={video?.id}
-              likes={video?.likes}
+              likes={video?.likes?.length}
               views={video?.views}
               title={video?.title}
               userImage={video?.creator?.image || ""}
