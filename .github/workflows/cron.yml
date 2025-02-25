@@ -3,6 +3,7 @@ name: Cron Job
 on:
   schedule:
     - cron: "*/1 * * * *"
+  workflow_dispatch:
 
 jobs:
   trigger-cron-job:
