@@ -2,6 +2,7 @@ import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
 import { z } from "zod";
 import {
+  getLikesVideosController,
   getRelatedVideosController,
   getVideoController,
   getVideosController,
@@ -12,6 +13,7 @@ import { createNotification } from "../services/notificationService";
 const app = new Hono()
   .get("/", getVideosController)
   .get("/related-videos", getRelatedVideosController)
+  .get("/likes-videos/:userId", getLikesVideosController)
   .get("/:id", getVideoController)
   .put(
     "/like-video/:id",

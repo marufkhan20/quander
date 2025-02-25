@@ -88,6 +88,41 @@ export const useGetRelatedVideos = ({
   return mutation;
 };
 
+export const useGetLikesVideos = ({
+  queryKey,
+  orientation,
+  type,
+  published,
+  sort,
+  userId,
+  limit,
+}: {
+  queryKey: string;
+  orientation: string;
+  type?: string;
+  userId?: string;
+  sort?: string;
+  published?: boolean;
+  limit?: number;
+}) => {
+  type ResponseType = InferResponseType<(typeof client.api.videos)["$get"]>;
+
+  const mutation = useQuery<ResponseType, Error>({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const response = await client.api.videos["$get"]({
+        param: {
+          userId,
+        },
+        query: { orientation, type, published, sort, userId, limit },
+      });
+      return await response.json();
+    },
+  });
+
+  return mutation;
+};
+
 export const useLikeVideo = () => {
   type ResponseType = InferResponseType<
     (typeof client.api.videos)["like-video"][":id"]["$put"]

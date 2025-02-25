@@ -101,3 +101,52 @@ export const Orientation = {
   longVideos: "landscape",
   shortVideos: "portrait",
 };
+
+// subscriptions
+export const monthlySubscriptions: SubscriptionType[] = [
+  {
+    id: 1,
+    name: "basic",
+    price: 19,
+    credits: 100,
+    priceId: "price_1QwArgH3L9RCLevZckH8RQkd",
+  },
+  {
+    id: 2,
+    name: "standard",
+    price: 34,
+    credits: 200,
+    priceId: "price_1QwAs9H3L9RCLevZGeEok6g7",
+  },
+  {
+    id: 1,
+    name: "popular",
+    price: 59,
+    credits: 300,
+    priceId: "price_1QwAsYH3L9RCLevZlKNSedtE",
+  },
+];
+
+export const yearlySubscriptions: SubscriptionType[] = [
+  {
+    id: 1,
+    name: "basic",
+    price: 190,
+    credits: 1000,
+    priceId: "price_1QwArgH3L9RCLevZckH8RQkd",
+  },
+  {
+    id: 2,
+    name: "standard",
+    price: 340,
+    credits: 2000,
+    priceId: "price_1QwAs9H3L9RCLevZGeEok6g7",
+  },
+  {
+    id: 1,
+    name: "popular",
+    price: 590,
+    credits: 3000,
+    priceId: "price_1QwAsYH3L9RCLevZlKNSedtE",
+  },
+];

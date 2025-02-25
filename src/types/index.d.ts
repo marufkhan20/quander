@@ -21,3 +21,11 @@ interface CommentWithAuthor {
     name: string | null;
   };
 }
+
+type SubscriptionType = {
+  id: number | string;
+  name: string;
+  price: number;
+  credits: number;
+  priceId: string;
+};

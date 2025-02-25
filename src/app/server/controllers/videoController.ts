@@ -52,6 +52,9 @@ export const getRelatedVideosController = async (c: Context) => {
   const targetVideo = await prisma.video.findUnique({
     where: { id },
     select: {
+      id: true,
+      views: true,
+      thumbnail: true,
       title: true,
       tag: true,
       creatorId: true,
@@ -90,6 +93,34 @@ export const getRelatedVideosController = async (c: Context) => {
   }
 
   return c.json([]);
+};
+
+export const getLikesVideosController = async (c: Context) => {
+  const { userId } = c.req.param();
+  const { orientation, type, sort, published, limit } = c.req.query();
+
+  const likedVideos = await prisma.video.findMany({
+    where: {
+      likes: {
+        has: userId, // Checks if the userId exists in the likes array
+      },
+      published: published === "true" ? true : false,
+      orientation,
+      type: type === "challange" ? VideoType.challange : VideoType.regular,
+    },
+    select: {
+      id: true,
+      views: true,
+      thumbnail: true,
+      title: true,
+    },
+    ...(limit ? { take: Number(limit) } : {}),
+    orderBy: {
+      createdAt: sort === "desc" ? "desc" : "asc",
+    },
+  });
+
+  return c.json([likedVideos]);
 };
 
 export const getVideoController = async (c: Context) => {

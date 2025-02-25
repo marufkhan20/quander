@@ -66,6 +66,8 @@ const Navbar = ({ isCollapsed }: IProps) => {
       updateInfo({
         name: data?.name,
         image: data?.image,
+        email: data?.email,
+        id: data?.id,
       });
     }
   }, [data, updateInfo]);

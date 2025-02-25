@@ -3,6 +3,7 @@ import characterRoute from "@/app/server/routes/characterRoute";
 import commentRoute from "@/app/server/routes/commentRoute";
 import notificationRoute from "@/app/server/routes/notificationRoute";
 import profileRoute from "@/app/server/routes/profileRoute";
+import subscriptionRoute from "@/app/server/routes/subscriptionRoute";
 import videoRoute from "@/app/server/routes/videoRoute";
 import { Hono } from "hono";
 import { handle } from "hono/vercel";
@@ -14,7 +15,8 @@ const routes = app
   .route("/profile", profileRoute)
   .route("/characters", characterRoute)
   .route("/comments", commentRoute)
-  .route("/notifications", notificationRoute);
+  .route("/notifications", notificationRoute)
+  .route("/subscriptions", subscriptionRoute);
 
 export const GET = handle(app);
 export const POST = handle(app);

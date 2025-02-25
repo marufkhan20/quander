@@ -5,6 +5,7 @@ interface IState {
   image?: string | undefined | null;
   description?: string | undefined | null;
   email?: string | undefined | null;
+  id?: string | undefined | null;
 }
 
 interface AppState extends IState {
@@ -16,5 +17,6 @@ export const useProfileStore = create<AppState>((set) => ({
   image: "",
   description: "",
   email: "",
+  id: "",
   updateInfo: (data) => set((state) => ({ ...state, ...data })),
 }));
