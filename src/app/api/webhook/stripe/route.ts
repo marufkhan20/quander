@@ -5,8 +5,7 @@ import { BillingCycle } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const webhookSecret =
-    "whsec_4980236a2427473e740cf7d22ab6c18b0d29670a2fd7ccf79b024167b77d6de0";
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
   const sig = req.headers.get("stripe-signature") as string;
 
   if (!sig || !webhookSecret) {

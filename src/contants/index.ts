@@ -140,13 +140,13 @@ export const yearlySubscriptions: SubscriptionType[] = [
     name: "standard",
     price: 340,
     credits: 200,
-    priceId: "price_1QwAs9H3L9RCLevZGeEok6g7",
+    priceId: "price_1QwGV4H3L9RCLevZ0OMu6Z6q",
   },
   {
     id: 1,
     name: "popular",
     price: 590,
     credits: 300,
-    priceId: "price_1QwAsYH3L9RCLevZlKNSedtE",
+    priceId: "price_1QwGVlH3L9RCLevZ93mADI9I",
   },
 ];

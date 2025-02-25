@@ -31,6 +31,15 @@ const app = new Hono().post(
         credits,
       } = c.req.valid("json");
 
+      console.log({
+        email,
+        priceId,
+        userId,
+        subscriptionType,
+        subscription,
+        credits,
+      });
+
       if (
         !priceId ||
         !email ||
