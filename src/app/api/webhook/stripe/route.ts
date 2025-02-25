@@ -2,33 +2,16 @@
 import prisma from "@/app/server/db/prisma";
 import { stripe } from "@/lib/stripe";
 import { BillingCycle } from "@prisma/client";
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-
-export const config = {
-  runtime: "edge", // ✅ Run on Vercel's Edge runtime to avoid body parsing issues
-};
-
-async function getRawBody(req: Request): Promise<Buffer> {
-  const reader = req.body?.getReader();
-  const chunks: Uint8Array[] = [];
-
-  if (reader) {
-    let done = false;
-    while (!done) {
-      const { value, done: readerDone } = await reader.read();
-      if (value) chunks.push(value);
-      done = readerDone;
-    }
-  }
-
-  return Buffer.concat(chunks);
-}
 
 export async function POST(req: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  const sig = req.headers.get("stripe-signature");
+  const body = await req.text();
+  const reqHeaders = await headers();
+  const signature = reqHeaders.get("stripe-signature");
 
-  if (!sig || !webhookSecret) {
+  if (!signature || !webhookSecret) {
     return NextResponse.json(
       { error: "Missing Stripe signature or secret" },
       { status: 400 }
@@ -37,8 +20,12 @@ export async function POST(req: Request) {
 
   let event;
   try {
-    const rawBody = await getRawBody(req); // ✅ Get raw body directly
-    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
+    // ✅ Get raw body directly
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature ?? "",
+      process.env.STRIPE_WEBHOOK_SECRET ?? ""
+    );
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
     return NextResponse.json(
@@ -46,8 +33,6 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-
-  console.log("event type", event.type);
 
   switch (event.type) {
     case "checkout.session.completed": {
