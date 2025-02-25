@@ -5,10 +5,24 @@ import { BillingCycle } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export const config = {
-  api: {
-    bodyParser: false, // ✅ Disable body parsing
-  },
+  runtime: "edge", // ✅ Run on Vercel's Edge runtime to avoid body parsing issues
 };
+
+async function getRawBody(req: Request): Promise<Buffer> {
+  const reader = req.body?.getReader();
+  const chunks: Uint8Array[] = [];
+
+  if (reader) {
+    let done = false;
+    while (!done) {
+      const { value, done: readerDone } = await reader.read();
+      if (value) chunks.push(value);
+      done = readerDone;
+    }
+  }
+
+  return Buffer.concat(chunks);
+}
 
 export async function POST(req: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -23,7 +37,7 @@ export async function POST(req: Request) {
 
   let event;
   try {
-    const rawBody = await req.text(); // ✅ Get raw body directly
+    const rawBody = await getRawBody(req); // ✅ Get raw body directly
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
