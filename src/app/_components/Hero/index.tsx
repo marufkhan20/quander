@@ -40,11 +40,12 @@ const Hero = () => {
         </CarouselContent>
       </Carousel>
 
-      {!isLoading && !featuredVideos && (
-        <h2 className="text-white/60 text-base font-medium">
-          No Featured Video Found!!
-        </h2>
-      )}
+      {(!isLoading && !featuredVideos) ||
+        (featuredVideos?.length === 0 && (
+          <h2 className="text-white/60 text-base font-medium">
+            No Featured Video Found!!
+          </h2>
+        ))}
     </>
   );
 };

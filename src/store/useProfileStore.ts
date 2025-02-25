@@ -6,6 +6,11 @@ interface IState {
   description?: string | undefined | null;
   email?: string | undefined | null;
   id?: string | undefined | null;
+  isLoading?: boolean;
+  credits?: number;
+  subscription?: string | undefined | null;
+  billingCycle?: string | undefined | null;
+  subId?: string | undefined | null;
 }
 
 interface AppState extends IState {
@@ -18,5 +23,10 @@ export const useProfileStore = create<AppState>((set) => ({
   description: "",
   email: "",
   id: "",
+  isLoading: false,
+  credits: 0,
+  subscription: "",
+  billingCycle: "",
+  subId: "",
   updateInfo: (data) => set((state) => ({ ...state, ...data })),
 }));

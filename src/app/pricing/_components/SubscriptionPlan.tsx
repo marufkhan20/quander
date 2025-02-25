@@ -1,10 +1,14 @@
-import { useBuySubscription } from "@/api/useSubscription";
+import {
+  useBuySubscription,
+  useCancelSubscription,
+} from "@/api/useSubscription";
 import { cn } from "@/lib/utils";
 import { useProfileStore } from "@/store/useProfileStore";
 import { loadStripe } from "@stripe/stripe-js";
-import { Check } from "lucide-react";
+import { Check, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 interface IProps {
   subscription: SubscriptionType;
@@ -18,8 +22,15 @@ const stripePromise = loadStripe(
 const SubscriptionPlan = ({ subscription, subscriptionType }: IProps) => {
   const { credits, name, price, priceId } = subscription;
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { id } = useProfileStore();
+  const {
+    id,
+    subscription: activeSubscription,
+    billingCycle,
+    updateInfo,
+    subId,
+  } = useProfileStore();
 
   // buy subscription
   const { mutate: buySubscription, data } = useBuySubscription();
@@ -43,6 +54,56 @@ const SubscriptionPlan = ({ subscription, subscriptionType }: IProps) => {
       redirectToStripe();
     }
   }, [data]);
+
+  // buy subscription handler
+  const buySubscriptionHandler = () => {
+    setIsLoading(true);
+
+    // set plan info in local storage
+    localStorage.setItem(
+      "subscriptionPlan",
+      JSON.stringify({
+        name,
+        subscriptionType,
+        price,
+      })
+    );
+
+    buySubscription({
+      json: {
+        email: session?.user?.email || "",
+        priceId,
+        credits,
+        subscription: name,
+        subscriptionType,
+        userId: id || "",
+      },
+    });
+  };
+
+  // cancel subscription
+  const {
+    mutate: cancelSubscription,
+    isPending,
+    isSuccess,
+    isError,
+  } = useCancelSubscription();
+
+  useEffect(() => {
+    if (isSuccess) {
+      updateInfo({
+        billingCycle: null,
+        credits: 0,
+        subscription: "Free",
+      });
+
+      toast.success("Subscription Cancelled Successfully.");
+    }
+
+    if (isError) {
+      toast.error("Server error occurred.");
+    }
+  }, [isSuccess, isError, updateInfo]);
   return (
     <div className="rounded-[10px] bg-white-2 h-fit">
       <div
@@ -68,23 +129,34 @@ const SubscriptionPlan = ({ subscription, subscriptionType }: IProps) => {
         <p className="mt-5 font-medium text-white/80">
           {subscriptionType === "yearly" ? credits * 12 : credits} Video Credits
         </p>
-        <button
-          className="mt-[30px] w-full py-3 transition-all hover:bg-primary hover:text-black px-3 bg-[#fafafa]/10 rounded-[10px] font-semibold"
-          onClick={() =>
-            buySubscription({
-              json: {
-                email: session?.user?.email || "",
-                priceId,
-                credits,
-                subscription: name,
-                subscriptionType,
-                userId: id || "",
-              },
-            })
-          }
-        >
-          Get Started
-        </button>
+        {name === activeSubscription && billingCycle === subscriptionType ? (
+          <button
+            className="mt-[30px] flex items-center justify-center gap-1 w-full py-3 transition-all hover:bg-red-600 px-3 bg-red-500 rounded-[10px] font-semibold"
+            onClick={() =>
+              cancelSubscription({
+                param: { subId: subId as string },
+              })
+            }
+            disabled={isPending}
+          >
+            {isPending && (
+              <Loader className="animate-spin transition-all size-4" />
+            )}
+            Cancel Subscription
+          </button>
+        ) : (
+          <button
+            className="mt-[30px] w-full py-3 px-3 rounded-[10px] font-semibold flex items-center justify-center gap-1 transition-all
+            disabled:cursor-not-allowed text-white hover:text-black bg-[#fafafa]/10 disabled:bg-white/5 hover:bg-primary disabled:text-white/40 disabled:hover:text-white/40"
+            onClick={buySubscriptionHandler}
+            disabled={activeSubscription?.toLowerCase() !== "free" || isLoading}
+          >
+            {isLoading && (
+              <Loader className="animate-spin transition-all size-4" />
+            )}
+            Get Started
+          </button>
+        )}
       </div>
       <div className="p-[30px]">
         <h4 className="uppercase text-sm font-semibold text-white/80 mb-2">

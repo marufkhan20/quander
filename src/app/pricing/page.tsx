@@ -1,14 +1,26 @@
 "use client";
 import { monthlySubscriptions, yearlySubscriptions } from "@/contants";
 import { cn } from "@/lib/utils";
+import { useProfileStore } from "@/store/useProfileStore";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import SubscriptionPlan from "./_components/SubscriptionPlan";
+import SubscriptionPlanSkeleton from "./_components/SubscriptionPlanSkeleton";
 
 const PricingPage = () => {
-  const [subscriptionType, setSubscriptionType] = useState<
-    "monthly" | "yearly"
-  >("monthly");
+  const [subscriptionType, setSubscriptionType] = useState("monthly");
+
+  const { isLoading, billingCycle } = useProfileStore();
+  const { status } = useSession();
+
+  useEffect(() => {
+    if (billingCycle) {
+      setSubscriptionType(billingCycle);
+    }
+  }, [billingCycle]);
+
+  const loading = isLoading || status === "loading";
   return (
     <main className="mt-10 sm:px-10 xl:px-20 mb-10">
       <h2 className="text-center text-[24px] leading-[18px] md:text-[32px] md:leading-[40px] font-extrabold mb-4">
@@ -25,6 +37,7 @@ const PricingPage = () => {
             "flex-1 sm:w-[230px] py-[10px] rounded-md transition-all relative",
             subscriptionType === "monthly" && "text-primary"
           )}
+          disabled={loading}
           onClick={() => setSubscriptionType("monthly")}
         >
           {subscriptionType === "monthly" && (
@@ -41,6 +54,7 @@ const PricingPage = () => {
             "flex-1 sm:w-[230px] py-[10px] rounded-md transition-all relative",
             subscriptionType === "yearly" && "text-primary"
           )}
+          disabled={loading}
           onClick={() => setSubscriptionType("yearly")}
         >
           {subscriptionType === "yearly" && (
@@ -54,25 +68,33 @@ const PricingPage = () => {
         </button>
       </div>
 
-      <div className="mt-10 grid items-center sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
-        {subscriptionType === "yearly" &&
-          yearlySubscriptions?.map((subscription) => (
-            <SubscriptionPlan
-              key={subscription?.id}
-              subscription={subscription}
-              subscriptionType="yearly"
-            />
-          ))}
+      {loading ? (
+        <div className="mt-10 grid items-center sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
+          <SubscriptionPlanSkeleton />
+          <SubscriptionPlanSkeleton />
+          <SubscriptionPlanSkeleton />
+        </div>
+      ) : (
+        <div className="mt-10 grid items-center sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
+          {subscriptionType === "yearly" &&
+            yearlySubscriptions?.map((subscription) => (
+              <SubscriptionPlan
+                key={subscription?.id}
+                subscription={subscription}
+                subscriptionType="yearly"
+              />
+            ))}
 
-        {subscriptionType === "monthly" &&
-          monthlySubscriptions?.map((subscription) => (
-            <SubscriptionPlan
-              key={subscription?.id}
-              subscription={subscription}
-              subscriptionType="monthly"
-            />
-          ))}
-      </div>
+          {subscriptionType === "monthly" &&
+            monthlySubscriptions?.map((subscription) => (
+              <SubscriptionPlan
+                key={subscription?.id}
+                subscription={subscription}
+                subscriptionType="monthly"
+              />
+            ))}
+        </div>
+      )}
     </main>
   );
 };

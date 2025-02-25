@@ -22,19 +22,21 @@ export const useBuySubscription = () => {
   return mutation;
 };
 
-export const useDeleteVideo = () => {
+export const useCancelSubscription = () => {
   type ResponseType = InferResponseType<
-    (typeof client.api.videos)[":id"]["$delete"]
+    (typeof client.api.subscriptions)[":subId"]["$delete"]
   >;
 
   type RequestType = InferRequestType<
-    (typeof client.api.videos)[":id"]["$delete"]
+    (typeof client.api.subscriptions)[":subId"]["$delete"]
   >;
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationKey: ["delete-video"],
+    mutationKey: ["cancel-subscription"],
     mutationFn: async (data) => {
-      const response = await client.api.videos[":id"]["$delete"](data);
+      const response = await client.api.subscriptions[":subId"]["$delete"](
+        data
+      );
       return await response.json();
     },
   });

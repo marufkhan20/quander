@@ -47,7 +47,7 @@ const Navbar = ({ isCollapsed }: IProps) => {
   });
 
   // get profile info
-  const { refetch, data } = useGetProfile(
+  const { refetch, data, isPending } = useGetProfile(
     session?.user?.id || "",
     "profile-info"
   );
@@ -58,7 +58,15 @@ const Navbar = ({ isCollapsed }: IProps) => {
     }
   }, [session, refetch]);
 
-  const { updateInfo, name, image } = useProfileStore();
+  const { updateInfo, name, image, credits } = useProfileStore();
+
+  useEffect(() => {
+    if (isPending) {
+      updateInfo({
+        isLoading: isPending,
+      });
+    }
+  }, [isPending, updateInfo]);
 
   // set data global state
   useEffect(() => {
@@ -68,6 +76,11 @@ const Navbar = ({ isCollapsed }: IProps) => {
         image: data?.image,
         email: data?.email,
         id: data?.id,
+        isLoading: false,
+        credits: data?.credits,
+        subscription: data?.subscription,
+        billingCycle: data?.billingCycle,
+        subId: data?.subId,
       });
     }
   }, [data, updateInfo]);
@@ -142,9 +155,9 @@ const Navbar = ({ isCollapsed }: IProps) => {
                   <DropdownMenuItem className="flex items-center gap-2 p-3 focus:bg-slate-800 focus:text-slate-100 cursor-pointer">
                     <User className="size-4" />
                     <span>Profile</span>
-                    {/* <span className="ml-auto text-xs text-slate-400">
-                      400 connections
-                    </span> */}
+                    <span className="ml-auto text-xs text-slate-400">
+                      {credits} {credits && credits > 1 ? "Credits" : "Credit"}
+                    </span>
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>
