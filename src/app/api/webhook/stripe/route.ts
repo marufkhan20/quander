@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "@/app/server/db/prisma";
 import { stripe } from "@/lib/stripe";
+import { BillingCycle } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -58,6 +59,10 @@ export async function POST(req: Request) {
             credits: parseInt(credits || "0", 10),
             subId: subscriptionId,
             subExpireDate,
+            billingCycle:
+              subscriptionType === "monthly"
+                ? BillingCycle.monthly
+                : BillingCycle.yearly,
           },
         });
       }
@@ -69,15 +74,11 @@ export async function POST(req: Request) {
       const invoice = event.data.object;
       let subscriptionId = invoice.subscription;
 
-      console.log("event", event);
-
       // If subscriptionId is not in the event, retrieve it from the invoice
       if (!subscriptionId) {
         const invoiceDetails = await stripe.invoices.retrieve(invoice.id);
         subscriptionId = invoiceDetails.subscription;
       }
-
-      console.log("subscriptionId", subscriptionId);
 
       if (subscriptionId) {
         const stripeSubscription = await stripe.subscriptions.retrieve(
@@ -98,6 +99,10 @@ export async function POST(req: Request) {
               subId: subscriptionId as string,
               credits: parseInt(credits || "0", 10),
               subExpireDate,
+              billingCycle:
+                subscriptionType === "monthly"
+                  ? BillingCycle.monthly
+                  : BillingCycle.yearly,
             },
           });
         }

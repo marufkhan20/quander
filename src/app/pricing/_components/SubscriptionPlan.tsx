@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 interface IProps {
   subscription: SubscriptionType;
-  subscriptionType: "month" | "year";
+  subscriptionType: "monthly" | "yearly";
 }
 
 const stripePromise = loadStripe(
@@ -66,7 +66,7 @@ const SubscriptionPlan = ({ subscription, subscriptionType }: IProps) => {
           <span className="text-[24px] font-semibold">/{subscriptionType}</span>
         </div>
         <p className="mt-5 font-medium text-white/80">
-          {credits} Video Credits
+          {subscriptionType === "yearly" ? credits * 12 : credits} Video Credits
         </p>
         <button
           className="mt-[30px] w-full py-3 transition-all hover:bg-primary hover:text-black px-3 bg-[#fafafa]/10 rounded-[10px] font-semibold"

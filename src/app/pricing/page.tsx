@@ -60,7 +60,7 @@ const PricingPage = () => {
             <SubscriptionPlan
               key={subscription?.id}
               subscription={subscription}
-              subscriptionType="year"
+              subscriptionType="yearly"
             />
           ))}
 
@@ -69,7 +69,7 @@ const PricingPage = () => {
             <SubscriptionPlan
               key={subscription?.id}
               subscription={subscription}
-              subscriptionType="month"
+              subscriptionType="monthly"
             />
           ))}
       </div>
