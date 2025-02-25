@@ -4,6 +4,35 @@ import { stripe } from "@/lib/stripe";
 import { BillingCycle } from "@prisma/client";
 import { NextResponse } from "next/server";
 
+async function getRawBody(req: Request): Promise<Buffer> {
+  const readable = req.body;
+  const chunks: Uint8Array[] = [];
+  const reader = readable?.getReader();
+
+  if (reader) {
+    let done = false;
+    while (!done) {
+      const { done: readerDone, value } = await reader.read();
+      if (value) {
+        chunks.push(value);
+      }
+      done = readerDone;
+    }
+  }
+
+  // Concatenate Uint8Array chunks into a single Uint8Array
+  const totalLength = chunks.reduce((acc, chunk) => acc + chunk.length, 0);
+  const mergedArray = new Uint8Array(totalLength);
+
+  let offset = 0;
+  for (const chunk of chunks) {
+    mergedArray.set(chunk, offset);
+    offset += chunk.length;
+  }
+
+  return Buffer.from(mergedArray);
+}
+
 export async function POST(req: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
   const sig = req.headers.get("stripe-signature") as string;
@@ -17,7 +46,7 @@ export async function POST(req: Request) {
 
   let event;
   try {
-    const rawBody = await req.text(); // ✅ Fix: Use req.text() to get the raw body
+    const rawBody = await getRawBody(req); // ✅ Fix: Use req.text() to get the raw body
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
