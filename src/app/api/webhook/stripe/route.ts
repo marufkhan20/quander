@@ -6,6 +6,13 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+  runtime: "nodejs",
+};
+
 export async function POST(req: Request) {
   const rawBody = await req.text(); // ✅ Ensure raw request body
   const reqHeaders = await headers(); // ✅ Await headers() before accessing get()
