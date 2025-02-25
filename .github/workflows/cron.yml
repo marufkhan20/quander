@@ -2,7 +2,7 @@ name: Cron Job
 
 on:
   schedule:
-    - cron: "* * * * *" # Runs every minute
+    - cron: "*/1 * * * *"
 
 jobs:
   trigger-cron-job:
