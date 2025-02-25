@@ -4,27 +4,27 @@ import { stripe } from "@/lib/stripe";
 import { BillingCycle } from "@prisma/client";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import Stripe from "stripe";
 
 export async function POST(req: Request) {
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-  const body = await req.text();
-  const reqHeaders = await headers();
+  const rawBody = await req.text(); // ✅ Ensure raw request body
+  const reqHeaders = await headers(); // ✅ Await headers() before accessing get()
   const signature = reqHeaders.get("stripe-signature");
 
-  if (!signature || !webhookSecret) {
+  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
     return NextResponse.json(
       { error: "Missing Stripe signature or secret" },
       { status: 400 }
     );
   }
 
-  let event;
+  let event: Stripe.Event;
+
   try {
-    // ✅ Get raw body directly
     event = stripe.webhooks.constructEvent(
-      body,
-      signature ?? "",
-      process.env.STRIPE_WEBHOOK_SECRET ?? ""
+      rawBody,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err: any) {
     console.error("Webhook signature verification failed:", err.message);
