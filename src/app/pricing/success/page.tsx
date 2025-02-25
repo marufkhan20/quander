@@ -12,44 +12,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function SubscriptionSuccess() {
-  useEffect(() => {
-    // Trigger confetti animation when component mounts
-    const timer = setTimeout(() => {
-      // setShowConfetti(true);
-      const duration = 3 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-      function randomInRange(min: number, max: number) {
-        return Math.random() * (max - min) + min;
-      }
-
-      const interval: any = setInterval(() => {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-          return clearInterval(interval);
-        }
-
-        const particleCount = 50 * (timeLeft / duration);
-
-        // since particles fall down, start a bit higher than random
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-        });
-        confetti({
-          ...defaults,
-          particleCount,
-          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-        });
-      }, 250);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   const [price, setPrice] = useState(0);
   const { status } = useSession();
   const { isLoading, billingCycle, subscription } = useProfileStore();
@@ -79,6 +41,49 @@ export default function SubscriptionSuccess() {
       year: "numeric",
     });
   }
+
+  // animation effect
+  useEffect(() => {
+    if (!loading && billingCycle) {
+      const timer = setTimeout(() => {
+        const duration = 3 * 1000;
+        const animationEnd = Date.now() + duration;
+        const defaults = {
+          startVelocity: 30,
+          spread: 360,
+          ticks: 60,
+          zIndex: 0,
+        };
+
+        function randomInRange(min: number, max: number) {
+          return Math.random() * (max - min) + min;
+        }
+
+        const interval: any = setInterval(() => {
+          const timeLeft = animationEnd - Date.now();
+
+          if (timeLeft <= 0) {
+            return clearInterval(interval);
+          }
+
+          const particleCount = 50 * (timeLeft / duration);
+
+          confetti({
+            ...defaults,
+            particleCount,
+            origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+          });
+          confetti({
+            ...defaults,
+            particleCount,
+            origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+          });
+        }, 250);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading, billingCycle]);
   return (
     <div className="flex flex-col items-center p-4">
       <div className="max-w-md w-full space-y-8">
