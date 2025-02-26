@@ -9,56 +9,74 @@ datasource db {
 }
 
 model Project {
-  id                String    @id @default(uuid())
-  overlays          Json?     @db.JsonB
-  aspectRatio       String?   @default("16:9")
-  durationInFrames  Int       @default(300)
-  status            String    @default("generating_images")
-  currentSceneCount Int       @default(0)
+  id                String        @id @default(uuid())
+  name              String?       @default("Untitled Project")
+  thumbnailSrc      String?
+  overlays          Json?         @db.JsonB
+  aspectRatio       String?       @default("16:9")
+  durationInFrames  Int           @default(300)
+  status            String        @default("generating_images")
+  currentSceneCount Int           @default(0)
   totalSceneCount   Int?
   lastSavedAt       DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  version           Int       @default(0)
-  cref              Json?     @db.JsonB
-  crefImages        Json?     @db.JsonB
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  version           Int           @default(0)
   sref              String?
-  scripts           Json[]    @default([])
-  sounds            Json[]    @default([])
+  srefImageSrc      String?
+  scripts           Json[]        @default([])
+  sounds            Json[]        @default([])
   userId            String
-  user              User      @relation(fields: [userId], references: [id])
-  baseId            String?
+  user              User          @relation(fields: [userId], references: [id])
+  media             MediaItem[]
+  characters        Character[]
+}
+
+model MediaItem {
+  id            String   @id @default(uuid())
+  kind          String   
+  mediaType     String   
+  src           String
+  thumbnails    String[]
+  model         String?
+  prompt        String?
+  status        String   
+  taskId        String?
+  duration      Int?   
+  width         Int?
+  height        Int?
+  errorMessage  String?
+  metadata      Json?    @db.JsonB
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String      @id @default(uuid())
   name          String?
-  email         String?        @unique
+  email         String?     @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  credits       Int            @default(0)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  credits       Int         @default(0)
   subExpireDate DateTime?
-  subId         String?        @unique
+  subId         String?     @unique
   subscription  String?
-  ownedChannels Channel[]      @relation("ChannelOwner")
-  comments      Comment[]      @relation("UserComments")
+  ownedChannels Channel[]   @relation("ChannelOwner")
+  comments      Comment[]   @relation("UserComments")
   videos        Video[]
-  subscriptions Channel[]      @relation("ChannelSubscribers")
+  subscriptions Channel[]   @relation("ChannelSubscribers")
   Characters    Character[]
   projects      Project[]
+  mediaItems    MediaItem[]
   creditValue   String?
   description   String?
   videoTime     String?
-  challengeWin  Int            @default(0)
-  Notification  Notification[]
-  billingCycle  BillingCycle   @default(monthly)
-}
-
-enum BillingCycle {
-  monthly
-  yearly
 }
 
 model Video {
@@ -79,17 +97,10 @@ model Video {
   channel     Channel   @relation(fields: [channelId], references: [id])
   creator     User      @relation(fields: [creatorId], references: [id])
   generated   Boolean?
-  likes       String[]  @default([]) // Store user IDs who liked the video
-  type        VideoType @default(regular)
-}
-
-enum VideoType {
-  challange
-  regular
 }
 
 model Channel {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   name        String
   description String?
   createdAt   DateTime @default(now())
@@ -101,7 +112,7 @@ model Channel {
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,26 +123,14 @@ model Comment {
 }
 
 model Character {
-  id          String   @id @default(cuid())
-  picture     String
+  id          String    @id @default(uuid())
+  imageUrl    String
   name        String
   description String
   creatorId   String
-  creator     User     @relation(fields: [creatorId], references: [id], onDelete: Cascade) // Reference to User and cascade delete,
-  published   Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Notification {
-  id        String   @id @default(cuid())
-  title     String
-  icon      String?
-  read      Boolean  @default(false)
-  image     String?
-  link      String?
-  creatorId String
-  creator   User     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  creator     User      @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
