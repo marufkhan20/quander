@@ -91,19 +91,17 @@ export const NavItem = ({
 }) => {
   const { data: session } = useSession();
   const currentPath = usePathname();
+
   const isProfile = label === "Profile";
   const isSignOut = label === "Sign Out";
 
-  const Wrapper: React.ElementType = isSignOut
-    ? "div"
-    : isProfile && !session
-    ? "div"
-    : Link;
-  const wrapperProps = isSignOut
-    ? { onClick }
-    : isProfile && !session
-    ? { onClick }
-    : { href: `/profile/${session?.user?.id}` };
+  const Wrapper: React.ElementType =
+    isSignOut || (isProfile && !session) ? "div" : Link;
+
+  const wrapperProps =
+    isSignOut || (isProfile && !session)
+      ? { onClick }
+      : { href: isProfile ? `/profile/${session?.user?.id}` : pathname };
 
   return (
     <Wrapper
@@ -120,7 +118,7 @@ export const NavItem = ({
         transition={{ duration: 0.2, ease: "easeInOut" }}
         className={cn("text-lg truncate", isCollapsed && "hidden")}
       >
-        {isProfile && !session ? "Sign In" : label}
+        {label}
       </motion.span>
     </Wrapper>
   );
