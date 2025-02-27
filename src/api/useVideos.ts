@@ -26,6 +26,10 @@ export const useGetVideo = ({
   return mutation;
 };
 
+export type VideosResponseType = InferResponseType<
+  (typeof client.api.videos)["$get"]
+>;
+
 export const useGetVideos = ({
   queryKey,
   orientation,
@@ -35,6 +39,7 @@ export const useGetVideos = ({
   userId,
   limit,
   userInfo,
+  generated,
 }: {
   queryKey: string;
   orientation: string;
@@ -44,14 +49,22 @@ export const useGetVideos = ({
   published?: boolean;
   limit?: number;
   userInfo?: boolean;
+  generated?: boolean;
 }) => {
-  type ResponseType = InferResponseType<(typeof client.api.videos)["$get"]>;
-
-  const mutation = useQuery<ResponseType, Error>({
+  const mutation = useQuery<VideosResponseType, Error>({
     queryKey: [queryKey],
     queryFn: async () => {
       const response = await client.api.videos["$get"]({
-        query: { orientation, type, published, sort, userId, limit, userInfo },
+        query: {
+          orientation,
+          type,
+          published,
+          sort,
+          userId,
+          limit,
+          userInfo,
+          generated,
+        },
       });
       return await response.json();
     },
@@ -100,21 +113,27 @@ export const useGetLikesVideos = ({
   queryKey: string;
   orientation: string;
   type?: string;
-  userId?: string;
+  userId: string;
   sort?: string;
   published?: boolean;
   limit?: number;
 }) => {
-  type ResponseType = InferResponseType<(typeof client.api.videos)["$get"]>;
+  type ResponseType = InferResponseType<
+    (typeof client.api.videos)["likes-videos"]["$get"]
+  >;
 
   const mutation = useQuery<ResponseType, Error>({
     queryKey: [queryKey],
     queryFn: async () => {
-      const response = await client.api.videos["$get"]({
-        param: {
+      const response = await client.api.videos["likes-videos"]["$get"]({
+        query: {
           userId,
+          orientation,
+          type,
+          published,
+          sort,
+          limit,
         },
-        query: { orientation, type, published, sort, userId, limit },
       });
       return await response.json();
     },

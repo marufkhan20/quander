@@ -4,8 +4,16 @@ import prisma from "../db/prisma";
 
 export const getVideosController = async (c: Context) => {
   try {
-    const { userId, orientation, type, sort, published, limit, userInfo } =
-      c.req.query();
+    const {
+      userId,
+      orientation,
+      type,
+      sort,
+      published,
+      limit,
+      userInfo,
+      generated,
+    } = c.req.query();
 
     const videos = await prisma.video.findMany({
       where: {
@@ -13,6 +21,7 @@ export const getVideosController = async (c: Context) => {
         published: published === "true" ? true : false,
         orientation,
         type: type === "challange" ? VideoType.challange : VideoType.regular,
+        ...(generated ? { generated: true } : {}),
       },
       ...(limit ? { take: Number(limit) } : {}),
       ...(userInfo === "true"
@@ -72,6 +81,7 @@ export const getRelatedVideosController = async (c: Context) => {
         orientation: targetVideo.orientation,
         type: targetVideo.type,
         published: true,
+        generated: true,
         OR: [
           { title: { contains: titleKeywords, mode: "insensitive" } },
           ...(targetVideo.tag ? [{ tag: targetVideo.tag }] : []),
@@ -96,8 +106,7 @@ export const getRelatedVideosController = async (c: Context) => {
 };
 
 export const getLikesVideosController = async (c: Context) => {
-  const { userId } = c.req.param();
-  const { orientation, type, sort, published, limit } = c.req.query();
+  const { orientation, sort, published, limit, userId } = c.req.query();
 
   const likedVideos = await prisma.video.findMany({
     where: {
@@ -105,8 +114,9 @@ export const getLikesVideosController = async (c: Context) => {
         has: userId, // Checks if the userId exists in the likes array
       },
       published: published === "true" ? true : false,
+      generated: true,
       orientation,
-      type: type === "challange" ? VideoType.challange : VideoType.regular,
+      // type: type === "challange" ? VideoType.challange : VideoType.regular,
     },
     select: {
       id: true,
@@ -120,7 +130,7 @@ export const getLikesVideosController = async (c: Context) => {
     },
   });
 
-  return c.json([likedVideos]);
+  return c.json(likedVideos);
 };
 
 export const getVideoController = async (c: Context) => {

@@ -29,7 +29,7 @@ export const SIDEBAR_ITEMS: SidebarItemType[] = [
   {
     name: "Likes",
     icon: Heart,
-    pathname: "/likes",
+    pathname: "/likes-videos",
   },
   {
     name: "Uploads",

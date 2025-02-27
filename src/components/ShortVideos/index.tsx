@@ -21,6 +21,7 @@ const ShortVideos = ({ title }: IProps) => {
     queryKey: "get-home-shorts-videos",
     published: true,
     sort: "desc",
+    generated: true,
   });
   return (
     <section className="mt-6 mb-10 relative">

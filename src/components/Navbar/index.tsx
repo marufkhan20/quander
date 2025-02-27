@@ -70,6 +70,7 @@ const Navbar = ({ isCollapsed }: IProps) => {
 
   // set data global state
   useEffect(() => {
+    console.log("data", data);
     if (data?.id) {
       updateInfo({
         name: data?.name,
@@ -83,7 +84,13 @@ const Navbar = ({ isCollapsed }: IProps) => {
         subId: data?.subId,
       });
     }
-  }, [data, updateInfo]);
+
+    if (!isPending) {
+      updateInfo({
+        isLoading: false,
+      });
+    }
+  }, [data, updateInfo, isPending]);
   return (
     <>
       <div className="w-full hidden lg:flex items-center gap-4">

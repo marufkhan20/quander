@@ -22,6 +22,7 @@ const Videos = ({ title }: IProps) => {
     queryKey: "get-home-videos",
     published: true,
     sort: "desc",
+    generated: true,
   });
   return (
     <section className="mt-6 relative">

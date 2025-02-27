@@ -1,6 +1,7 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useDeleteVideo, useUpdateVideo } from "@/api/useVideos";
+import { formatNumbers } from "@/lib/utils";
 import {
   Download,
   EllipsisVertical,
@@ -79,7 +80,7 @@ const ShortVideo = ({
         <h3 className="text-sm font-semibold">{title}</h3>
         <div className="flex items-center gap-1">
           <Play className="size-[18px]" />
-          <span>{views}</span>
+          <span>{formatNumbers(views)}</span>
         </div>
       </div>
 

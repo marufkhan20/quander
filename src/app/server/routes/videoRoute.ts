@@ -13,7 +13,7 @@ import { createNotification } from "../services/notificationService";
 const app = new Hono()
   .get("/", getVideosController)
   .get("/related-videos", getRelatedVideosController)
-  .get("/likes-videos/:userId", getLikesVideosController)
+  .get("/likes-videos", getLikesVideosController)
   .get("/:id", getVideoController)
   .put(
     "/like-video/:id",
