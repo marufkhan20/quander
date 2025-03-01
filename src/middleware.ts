@@ -16,6 +16,7 @@ export async function middleware(req: NextRequest) {
     /^\/api\/videos\/.*/,
     "/api/profile",
     "/api/characters",
+    "/api/challenges",
     "/api/cron",
   ];
   if (

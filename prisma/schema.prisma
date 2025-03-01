@@ -81,11 +81,30 @@ model Video {
   generated   Boolean?
   likes       String[]  @default([]) // Store user IDs who liked the video
   type        VideoType @default(regular)
+  challengeId String? // Optional Challenge ID
 }
 
 enum VideoType {
   challange
   regular
+}
+
+model Challenge {
+  id           String          @id @default(cuid())
+  title        String
+  description  String
+  thumbnail    String?
+  status       ChallengeStatus @default(active)
+  submitVideos String[] // Store video IDs
+  winners      String[] // Store user IDs
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+}
+
+enum ChallengeStatus {
+  active
+  voting
+  close
 }
 
 model Channel {

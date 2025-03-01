@@ -11,7 +11,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import AuthModal from "../AuthModal";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import { Drawer } from "../ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +32,6 @@ interface IProps {
 
 const Navbar = ({ isCollapsed }: IProps) => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
-  const [createForm, setCreateForm] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -112,12 +110,8 @@ const Navbar = ({ isCollapsed }: IProps) => {
         </div>
 
         {/* Create video form */}
-        <Drawer>
-          <CreateVideoForm
-            createForm={createForm}
-            setCreateForm={setCreateForm}
-          />
-        </Drawer>
+
+        <CreateVideoForm />
 
         {/* Notifications */}
         {session?.user?.id && <Notifications />}

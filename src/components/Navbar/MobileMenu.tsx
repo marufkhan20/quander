@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { SIDEBAR_ITEMS } from "@/contants";
 import { cn } from "@/lib/utils";
+import { useCreateVideoStore } from "@/store/useCreateVideoStore";
 import { LogOut, MoveRight, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -16,15 +17,15 @@ interface IProps {
 }
 
 const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
-  const [mobileCreateForm, setMobileCreateForm] = useState(false);
   const [openAuth, setOpenAuth] = useState(false);
   const pathname = usePathname();
+  const { open, updateInfo } = useCreateVideoStore();
 
   const { data: session } = useSession();
 
   useEffect(() => {
     setOpenMobileMenu(false);
-  }, [mobileCreateForm, setOpenMobileMenu, openAuth, pathname]);
+  }, [open, setOpenMobileMenu, openAuth, pathname]);
   return (
     <>
       <div
@@ -87,7 +88,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
 
             <button
               className="absolute left-5 bottom-[30px] right-5 flex items-center justify-center gap-2 py-4 transition-all hover:scale-105 bg-primary rounded-[10px] font-semibold text-lg text-black"
-              onClick={() => setMobileCreateForm(true)}
+              onClick={() => updateInfo({ open: true })}
             >
               Create a video <MoveRight />
             </button>
@@ -96,10 +97,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
       </div>
 
       <div className="block lg:hidden">
-        <CreateVideoForm
-          mobileCreateForm={mobileCreateForm}
-          setMobileCreateForm={setMobileCreateForm}
-        />
+        <CreateVideoForm />
       </div>
 
       {/* Auth mobile */}

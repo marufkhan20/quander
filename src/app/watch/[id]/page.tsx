@@ -278,6 +278,7 @@ const WatchPage = () => {
                         />
                       </div>
                       <span>{formatNumbers(likes)}</span>
+                      {/* TODO: Check authentication for like */}
                     </div>
                   </div>
                 </div>

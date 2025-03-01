@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn, timeAgo } from "@/lib/utils";
-import { Bell, Check, X } from "lucide-react";
+import { Bell, Check, Trophy, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -108,7 +108,7 @@ export default function Notifications() {
                     />
                   ) : (
                     <div className="rounded-full size-10 bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      {icon}
+                      {icon === "trophy" && <Trophy />}
                     </div>
                   )}
 

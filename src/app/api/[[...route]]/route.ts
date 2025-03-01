@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import challengeRoute from "@/app/server/routes/challengeRoute";
 import characterRoute from "@/app/server/routes/characterRoute";
 import commentRoute from "@/app/server/routes/commentRoute";
 import notificationRoute from "@/app/server/routes/notificationRoute";
@@ -16,6 +17,7 @@ const routes = app
   .route("/characters", characterRoute)
   .route("/comments", commentRoute)
   .route("/notifications", notificationRoute)
+  .route("/challenges", challengeRoute)
   .route("/subscriptions", subscriptionRoute);
 
 export const GET = handle(app);
