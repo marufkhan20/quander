@@ -5,7 +5,7 @@
       "schedule": "0 0 1 * *"
     },
     {
-      "path": "/api/cron/select-challenge-winnder",
+      "path": "/api/cron/select-challenge-winner",
       "schedule": "*/2 * * * *"
     }
   ]
