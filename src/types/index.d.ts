@@ -2,6 +2,7 @@ type SidebarItemType = {
   name: string;
   icon: React.ComponentType<{ className?: string }>;
   pathname: string;
+  requiredAuth: boolen;
 };
 
 type TagType = {

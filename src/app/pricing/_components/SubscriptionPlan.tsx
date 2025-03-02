@@ -57,6 +57,9 @@ const SubscriptionPlan = ({ subscription, subscriptionType }: IProps) => {
 
   // buy subscription handler
   const buySubscriptionHandler = () => {
+    if (!session) {
+      return toast.error("Please Login");
+    }
     setIsLoading(true);
 
     // set plan info in local storage

@@ -1,5 +1,6 @@
 "use client";
 import { TAGS } from "@/contants";
+import { useNavbarStore } from "@/store/useNavbarStore";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDownIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -9,7 +10,8 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
-  const [filter, setFilter] = useState("All");
+  const { updateInfo, filterTag } = useNavbarStore();
+
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,14 +28,10 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLanguageSelect = (langId: string) => {
-    if (!hasAccess && langId !== "javascript") return;
-
-    setFilter(langId);
+  const handleSelect = (filter: string) => {
+    updateInfo({ filterTag: filter });
     setIsOpen(false);
   };
-
-  // if (!mounted) return null;
 
   if (pathname !== "/") return null;
   return (
@@ -46,7 +44,9 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
       rounded-lg transition-all 
        duration-200 border border-gray-800/50 hover:border-gray-700
        ${
-         !hasAccess && filter !== "all" ? "opacity-50 cursor-not-allowed" : ""
+         !hasAccess && filterTag !== "All"
+           ? "opacity-50 cursor-not-allowed"
+           : ""
        }`}
       >
         {/* Decoration */}
@@ -57,7 +57,7 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
         />
 
         <span className="text-gray-200 min-w-[80px] text-left group-hover:text-white transition-colors">
-          {filter}
+          {filterTag || "All"}
         </span>
 
         <ChevronDownIcon
@@ -81,20 +81,54 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
             </div>
 
             <div className="max-h-[280px] overflow-y-auto overflow-x-hidden">
-              {TAGS?.map((item) => {
-                const Icon = item?.icon;
-                return (
-                  <div key={item?.name} className="relative group px-2">
-                    <button
-                      className={`
+              <div className="relative group px-2">
+                <button
+                  className={`
                       relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200
                       ${
-                        filter === item?.name
+                        filterTag === "All"
                           ? "bg-primary/10 text-primary"
                           : "text-gray-300"
                       }
                     `}
-                      onClick={() => handleLanguageSelect(item?.name)}
+                  onClick={() => handleSelect("All")}
+                  // disabled={isLocked}
+                >
+                  {/* decorator */}
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-primary/5 to-primary/5 rounded-lg 
+                      opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
+
+                  <span className="flex-1 text-left group-hover:text-white transition-colors">
+                    All
+                  </span>
+                  {/* selected language border */}
+                  {filterTag === "All" && (
+                    <motion.div
+                      className="absolute inset-0 border-2 border-primary/20 rounded-lg"
+                      transition={{
+                        type: "spring",
+                        bounce: 0.2,
+                        duration: 0.6,
+                      }}
+                    />
+                  )}
+                </button>
+              </div>
+              {TAGS?.map((item) => {
+                return (
+                  <div key={item} className="relative group px-2">
+                    <button
+                      className={`
+                      relative w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200
+                      ${
+                        filterTag === item
+                          ? "bg-primary/10 text-primary"
+                          : "text-gray-300"
+                      }
+                    `}
+                      onClick={() => handleSelect(item)}
                       // disabled={isLocked}
                     >
                       {/* decorator */}
@@ -102,27 +136,12 @@ function FilterSelect({ hasAccess }: { hasAccess: boolean }) {
                         className="absolute inset-0 bg-gradient-to-r from-primary/5 to-primary/5 rounded-lg 
                       opacity-0 group-hover:opacity-100 transition-opacity"
                       />
-                      <div
-                        className={`
-                         relative size-8 flex items-center justify-center rounded-lg p-1.5 group-hover:scale-110 transition-transform
-                         ${
-                           filter === item?.name
-                             ? "bg-primary/10"
-                             : "bg-gray-800/50"
-                         }
-                       `}
-                      >
-                        <div
-                          className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg 
-                        opacity-0 group-hover:opacity-100 transition-opacity"
-                        />
-                        <Icon />
-                      </div>
+
                       <span className="flex-1 text-left group-hover:text-white transition-colors">
-                        {item?.name}
+                        {item}
                       </span>
                       {/* selected language border */}
-                      {filter === item?.name && (
+                      {filterTag === item && (
                         <motion.div
                           className="absolute inset-0 border-2 border-primary/20 rounded-lg"
                           transition={{

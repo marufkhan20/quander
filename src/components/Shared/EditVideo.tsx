@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 import { useUpdateVideo } from "@/api/useVideos";
-import { TAGS_ITEMS } from "@/contants";
+import { TAGS } from "@/contants";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import { useParams } from "next/navigation";
@@ -114,7 +114,7 @@ const EditVideoContent = (props: ContentIProps) => {
               Tags
             </label>
             <div className="flex gap-[10px] flex-wrap">
-              {TAGS_ITEMS?.map((tag) => (
+              {TAGS?.map((tag) => (
                 <Tag
                   key={tag}
                   tag={tag}

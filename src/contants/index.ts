@@ -1,15 +1,8 @@
 import {
   Bolt,
-  BookOpen,
   Coins,
-  Cross,
   Heart,
-  HeartIcon,
-  History,
   Home,
-  LayoutGrid,
-  Moon,
-  PersonStanding,
   Trophy,
   UserRound,
   Users,
@@ -20,71 +13,47 @@ export const SIDEBAR_ITEMS: SidebarItemType[] = [
     name: "Home",
     icon: Home,
     pathname: "/",
+    requiredAuth: false,
   },
   {
     name: "Daily Challenges",
     icon: Trophy,
     pathname: "/daily-challenges",
+    requiredAuth: false,
   },
   {
     name: "Likes",
     icon: Heart,
     pathname: "/likes-videos",
+    requiredAuth: true,
   },
   {
     name: "Subscriptions",
     icon: Users,
     pathname: "/subscriptions",
+    requiredAuth: true,
   },
   {
     name: "Profile",
     icon: UserRound,
     pathname: "/profile",
+    requiredAuth: true,
   },
   {
     name: "Credits",
     icon: Coins,
     pathname: "/pricing",
+    requiredAuth: false,
   },
   {
     name: "Settings",
     icon: Bolt,
     pathname: "/settings",
+    requiredAuth: false,
   },
 ];
 
-export const TAGS: TagType[] = [
-  {
-    name: "All",
-    icon: LayoutGrid,
-  },
-  {
-    name: "History",
-    icon: History,
-  },
-  {
-    name: "Kid",
-    icon: PersonStanding,
-  },
-  {
-    name: "Couples",
-    icon: HeartIcon,
-  },
-  {
-    name: "Biographics",
-    icon: BookOpen,
-  },
-  {
-    name: "Bible",
-    icon: Cross,
-  },
-  {
-    name: "Bedtime",
-    icon: Moon,
-  },
-];
-
-export const TAGS_ITEMS: string[] = [
+export const TAGS: string[] = [
   "Comedy",
   "Adventure",
   "Fantasy",

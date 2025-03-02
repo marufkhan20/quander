@@ -21,7 +21,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Notifications() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [allRead, setAllRead] = useState(true);
 
@@ -35,7 +35,7 @@ export default function Notifications() {
   });
 
   useEffect(() => {
-    if (notifications) {
+    if (notifications && notifications?.length > 0) {
       const allRead = notifications.every((notification) => notification.read);
 
       setAllRead(allRead);
@@ -61,6 +61,8 @@ export default function Notifications() {
 
     router.push(link);
   };
+
+  if (status !== "loading" && !session) return null;
   return (
     <div className="hidden lg:flex items-center justify-center ">
       <DropdownMenu>
@@ -87,60 +89,64 @@ export default function Notifications() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-slate-800" />
           <DropdownMenuGroup className="max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-track-slate-800 scrollbar-thumb-slate-700 hover:scrollbar-thumb-slate-600">
-            {notifications?.map((item) => {
-              const { id, title, image, icon, read, createdAt, link } =
-                item || {};
+            {notifications &&
+              notifications?.length > 0 &&
+              notifications?.map((item) => {
+                const { id, title, image, icon, read, createdAt, link } =
+                  item || {};
 
-              return (
-                <DropdownMenuItem
-                  key={id}
-                  className={cn(
-                    "flex items-start gap-3 p-4 focus:bg-slate-800 focus:text-slate-100 cursor-pointer",
-                    read ? "text-slate-400" : "bg-white/5"
-                  )}
-                  onClick={() => handleRedirect(id, link || "/")}
-                >
-                  {image ? (
-                    <img
-                      src={image}
-                      alt="User avatar"
-                      className="rounded-full size-10 object-cover flex-shrink-0"
-                    />
-                  ) : (
-                    <div className="rounded-full size-10 bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      {icon === "trophy" && <Trophy />}
+                return (
+                  <DropdownMenuItem
+                    key={id}
+                    className={cn(
+                      "flex items-start gap-3 p-4 focus:bg-slate-800 focus:text-slate-100 cursor-pointer",
+                      read ? "text-slate-400" : "bg-white/5"
+                    )}
+                    onClick={() => handleRedirect(id, link || "/")}
+                  >
+                    {image ? (
+                      <img
+                        src={image}
+                        alt="User avatar"
+                        className="rounded-full size-10 object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="rounded-full size-10 bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        {icon === "trophy" && <Trophy />}
+                      </div>
+                    )}
+
+                    <div className="flex-1 space-y-1">
+                      <p className={cn("text-sm", read && "text-slate-400")}>
+                        {title}
+                      </p>
+                      <p
+                        className={cn(
+                          "text-xs",
+                          read ? "text-slate-500" : "text-slate-400"
+                        )}
+                      >
+                        {timeAgo(new Date(createdAt))}
+                      </p>
                     </div>
-                  )}
 
-                  <div className="flex-1 space-y-1">
-                    <p className={cn("text-sm", read && "text-slate-400")}>
-                      {title}
-                    </p>
-                    <p
+                    <button
                       className={cn(
-                        "text-xs",
-                        read ? "text-slate-500" : "text-slate-400"
+                        "rounded-full p-1",
+                        read
+                          ? "text-slate-500 hover:bg-white/10"
+                          : "text-primary"
                       )}
                     >
-                      {timeAgo(new Date(createdAt))}
-                    </p>
-                  </div>
-
-                  <button
-                    className={cn(
-                      "rounded-full p-1",
-                      read ? "text-slate-500 hover:bg-white/10" : "text-primary"
-                    )}
-                  >
-                    {read ? (
-                      <Check className="size-4" />
-                    ) : (
-                      <X className="size-4" />
-                    )}
-                  </button>
-                </DropdownMenuItem>
-              );
-            })}
+                      {read ? (
+                        <Check className="size-4" />
+                      ) : (
+                        <X className="size-4" />
+                      )}
+                    </button>
+                  </DropdownMenuItem>
+                );
+              })}
 
             {!isLoading && notifications?.length === 0 && (
               <p className="py-3 px-2 text-sm">No notification found!</p>

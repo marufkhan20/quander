@@ -60,6 +60,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }: IProps) => {
             label={item?.name}
             isCollapsed={isCollapsed}
             pathname={item?.pathname}
+            requiredAuth={item?.requiredAuth}
           />
           // </motion.div>
         ))}
@@ -82,10 +83,12 @@ export const NavItem = ({
   isCollapsed,
   pathname,
   onClick,
+  requiredAuth,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   isCollapsed?: boolean;
+  requiredAuth: boolean;
   pathname: string;
   onClick?: () => void;
 }) => {
@@ -103,6 +106,7 @@ export const NavItem = ({
       ? { onClick }
       : { href: isProfile ? `/profile/${session?.user?.id}` : pathname };
 
+  if (!session && requiredAuth) return null;
   return (
     <Wrapper
       {...wrapperProps}

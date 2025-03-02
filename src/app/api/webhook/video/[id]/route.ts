@@ -2,16 +2,14 @@ import prisma from "@/app/server/db/prisma";
 import { createNotification } from "@/app/server/services/notificationService";
 import { NextRequest, NextResponse } from "next/server";
 
-// Define the type for the route's parameters
-interface Params {
-  id: string;
-}
-
-export async function POST(req: NextRequest, { params }: { params: Params }) {
-  const { id } = params;
+export async function POST(req: NextRequest) {
+  const { searchParams } = new URL(req.nextUrl);
+  const id = searchParams.get("id");
 
   try {
-    const video = await prisma.video.findUnique({ where: { id } });
+    const video = await prisma.video.findUnique({
+      where: { id: id as string },
+    });
 
     if (video) {
       if (video?.challengeId) {

@@ -8,9 +8,9 @@ const Hero = () => {
     orientation: Orientation.longVideos,
     queryKey: "featured-videos",
     published: true,
-    sort: "desc",
+    sortByViews: true,
     type: "regular",
-    limit: 2,
+    limit: 3,
     userInfo: true,
   });
   return (

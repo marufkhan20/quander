@@ -1,9 +1,23 @@
 "use client";
 
 import { AlertCircle, RefreshCw } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function Page() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status !== "loading" && !session) {
+      router.push("/");
+      toast.error("Please login.");
+    }
+  }, [status, session, router]);
+
   const errorMessage =
     "We couldn't process your subscription request at this time.";
   return (

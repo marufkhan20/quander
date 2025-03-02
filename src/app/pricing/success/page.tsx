@@ -9,12 +9,23 @@ import confetti from "canvas-confetti";
 import { CheckCircle, Loader, Play, Star } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function SubscriptionSuccess() {
   const [price, setPrice] = useState(0);
-  const { status } = useSession();
   const { isLoading, billingCycle, subscription } = useProfileStore();
+
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status !== "loading" && !session) {
+      router.push("/");
+      toast.error("Please login.");
+    }
+  }, [status, session, router]);
 
   useEffect(() => {
     const data = localStorage.getItem("subscriptionPlan");

@@ -17,7 +17,7 @@ import {
 import Video, { VideoLoading } from "@/components/Videos/Video";
 import { useLayout } from "@/context/LayoutContext";
 import { cn } from "@/lib/utils";
-import { useCreateVideoStore } from "@/store/useCreateVideoStore";
+import { useNavbarStore } from "@/store/useNavbarStore";
 import { ChevronDownIcon, Eye, Info, Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -39,7 +39,7 @@ const DailyChallenges = () => {
     challengeId: string;
   }>({ id: "", challengeId: "" });
 
-  const { updateInfo } = useCreateVideoStore();
+  const { updateInfo } = useNavbarStore();
 
   // format date
   const formatDate = (dateString: string | Date) => {
@@ -188,7 +188,8 @@ const DailyChallenges = () => {
                   ) : (
                     <button
                       className="flex items-center gap-[10px] bg-primary rounded-sm px-4 py-2.5 text-black transition-all disabled:bg-gray-500 disabled:cursor-not-allowed hover:scale-105 duration-300"
-                      disabled={challenge?.status !== "active"}
+                      disabled={challenge?.status !== "active" || !session}
+                      onClick={() => updateInfo({ open: true })}
                     >
                       <Plus className="size-4" />
                       <span>Create Now</span>

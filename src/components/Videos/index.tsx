@@ -1,7 +1,8 @@
 "use client";
 import { useGetVideos } from "@/api/useVideos";
 import { Orientation } from "@/contants";
-import { ReactNode } from "react";
+import { useNavbarStore } from "@/store/useNavbarStore";
+import { ReactNode, useEffect } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -16,14 +17,28 @@ interface IProps {
 }
 
 const Videos = ({ title }: IProps) => {
-  const { data: videos, isLoading } = useGetVideos({
+  const { filterTag } = useNavbarStore();
+
+  const {
+    data: videos,
+    isLoading,
+    refetch,
+    isRefetching,
+  } = useGetVideos({
     orientation: Orientation.longVideos,
     type: "regular",
     queryKey: "get-home-videos",
     published: true,
     sort: "desc",
     generated: true,
+    tag: filterTag === "All" ? "" : filterTag,
   });
+
+  const loading = isLoading || isRefetching;
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, filterTag]);
   return (
     <section className="mt-6 relative">
       <Carousel>
@@ -54,7 +69,7 @@ const Videos = ({ title }: IProps) => {
                 </CarouselItem>
               ))}
 
-            {isLoading && (
+            {loading && (
               <>
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <CarouselItem
@@ -70,7 +85,7 @@ const Videos = ({ title }: IProps) => {
         </div>
       </Carousel>
 
-      {!isLoading && (!videos || videos?.length === 0) && (
+      {!loading && (!videos || videos?.length === 0) && (
         <h2 className="text-white/60 text-base font-medium">
           No Video Found!!
         </h2>

@@ -68,7 +68,6 @@ const Navbar = ({ isCollapsed }: IProps) => {
 
   // set data global state
   useEffect(() => {
-    console.log("data", data);
     if (data?.id) {
       updateInfo({
         name: data?.name,

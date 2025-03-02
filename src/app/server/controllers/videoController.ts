@@ -13,6 +13,8 @@ export const getVideosController = async (c: Context) => {
       limit,
       userInfo,
       generated,
+      tag,
+      sortByViews,
     } = c.req.query();
 
     const videos = await prisma.video.findMany({
@@ -22,6 +24,7 @@ export const getVideosController = async (c: Context) => {
         orientation,
         type: type === "challange" ? VideoType.challange : VideoType.regular,
         ...(generated ? { generated: true } : {}),
+        ...(tag ? { tag } : {}),
       },
       ...(limit ? { take: Number(limit) } : {}),
       ...(userInfo === "true"
@@ -37,7 +40,8 @@ export const getVideosController = async (c: Context) => {
           }
         : {}),
       orderBy: {
-        createdAt: sort === "desc" ? "desc" : "asc",
+        ...(sort ? { createdAt: sort === "desc" ? "desc" : "asc" } : {}),
+        ...(sortByViews ? { views: "desc" } : {}),
       },
     });
 
@@ -264,5 +268,19 @@ export const getVideoController = async (c: Context) => {
     console.log("next id", nextVideo?.id);
   }
 
-  return c.json({ ...video, previousVideoId, nextVideoId });
+  // get challenge status
+  let challengeStatus;
+
+  if (video?.challengeId) {
+    const challenge = await prisma.challenge.findUnique({
+      where: { id: video?.challengeId },
+      select: {
+        status: true,
+      },
+    });
+
+    challengeStatus = challenge?.status;
+  }
+
+  return c.json({ ...video, previousVideoId, nextVideoId, challengeStatus });
 };

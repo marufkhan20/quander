@@ -1,6 +1,6 @@
-import { TAGS_ITEMS } from "@/contants";
+import { TAGS } from "@/contants";
 import { cn } from "@/lib/utils";
-import { useCreateVideoStore } from "@/store/useCreateVideoStore";
+import { useNavbarStore } from "@/store/useNavbarStore";
 import {
   ArrowUp,
   Clock,
@@ -27,8 +27,7 @@ const CreateVideoForm = () => {
 
   const router = useRouter();
 
-  const { open, updateInfo, challengeId, challengeName } =
-    useCreateVideoStore();
+  const { open, updateInfo, challengeId, challengeName } = useNavbarStore();
 
   // submit handler
   const submitHandler = () => {
@@ -126,7 +125,7 @@ const CreateVideoForm = () => {
                   Tags
                 </label>
                 <div className="flex items-center gap-[10px] flex-wrap">
-                  {TAGS_ITEMS.map((item) => (
+                  {TAGS.map((item) => (
                     <Tag
                       selectedTag={selectedTag}
                       setSelectedTag={setSelectedTag}
@@ -207,7 +206,7 @@ const CreateVideoForm = () => {
                   <div>
                     <Carousel>
                       <CarouselContent>
-                        {TAGS_ITEMS.map((item) => (
+                        {TAGS.map((item) => (
                           <CarouselItem
                             key={item}
                             className="basis-1/2 sm:basis-1/4 md:basis-1/6"

@@ -40,6 +40,8 @@ export const useGetVideos = ({
   limit,
   userInfo,
   generated,
+  tag,
+  sortByViews,
 }: {
   queryKey: string;
   orientation: string;
@@ -50,6 +52,8 @@ export const useGetVideos = ({
   limit?: number;
   userInfo?: boolean;
   generated?: boolean;
+  tag?: string;
+  sortByViews?: boolean;
 }) => {
   const mutation = useQuery<VideosResponseType, Error>({
     queryKey: [queryKey],
@@ -64,6 +68,8 @@ export const useGetVideos = ({
           limit,
           userInfo,
           generated,
+          tag,
+          sortByViews,
         },
       });
       return await response.json();

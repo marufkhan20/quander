@@ -262,24 +262,74 @@ const WatchPage = () => {
                     >
                       <Download className="size-6" />
                     </button>
-                    <div className="flex items-center gap-2">
-                      <div
-                        className="w-11 h-11 rounded-full flex items-center justify-center text-[#e24988] bg-[#e24988]/5 cursor-pointer"
-                        onClick={likeVideoHandler}
-                      >
-                        {/* <Heart className="size-6" /> */}
-                        <img
-                          src="/images/icons/heart.svg"
-                          alt="heart"
-                          className={cn(
-                            "size-6",
-                            !isLiked && "invert brightness-0 hue-rotate-180"
-                          )}
-                        />
+                    {!session ? (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div className="flex items-center gap-2">
+                            <div className="w-11 h-11 rounded-full flex items-center justify-center text-[#e24988] bg-[#e24988]/5 cursor-not-allowed">
+                              {/* <Heart className="size-6" /> */}
+                              <img
+                                src="/images/icons/heart.svg"
+                                alt="heart"
+                                className={cn(
+                                  "size-6",
+                                  !isLiked &&
+                                    "invert brightness-0 hue-rotate-180"
+                                )}
+                              />
+                            </div>
+                            <span>{formatNumbers(likes)}</span>
+                            {/* TODO: Check authentication for like */}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Please Login</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : video?.challengeStatus === "close" ? (
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div className="flex items-center gap-2">
+                            <div className="w-11 h-11 rounded-full flex items-center justify-center text-[#e24988] bg-[#e24988]/5 cursor-not-allowed">
+                              {/* <Heart className="size-6" /> */}
+                              <img
+                                src="/images/icons/heart.svg"
+                                alt="heart"
+                                className={cn(
+                                  "size-6",
+                                  !isLiked &&
+                                    "invert brightness-0 hue-rotate-180"
+                                )}
+                              />
+                            </div>
+                            <span>{formatNumbers(likes)}</span>
+                            {/* TODO: Check authentication for like */}
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Challenge is closed. You can not vote.</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-11 h-11 rounded-full flex items-center justify-center text-[#e24988] bg-[#e24988]/5 cursor-pointer"
+                          onClick={likeVideoHandler}
+                        >
+                          {/* <Heart className="size-6" /> */}
+                          <img
+                            src="/images/icons/heart.svg"
+                            alt="heart"
+                            className={cn(
+                              "size-6",
+                              !isLiked && "invert brightness-0 hue-rotate-180"
+                            )}
+                          />
+                        </div>
+                        <span>{formatNumbers(likes)}</span>
+                        {/* TODO: Check authentication for like */}
                       </div>
-                      <span>{formatNumbers(likes)}</span>
-                      {/* TODO: Check authentication for like */}
-                    </div>
+                    )}
                   </div>
                 </div>
 

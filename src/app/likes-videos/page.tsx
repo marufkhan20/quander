@@ -14,10 +14,20 @@ import {
 import Video, { VideoLoading } from "@/components/Videos/Video";
 import { Orientation } from "@/contants";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const LikesVideos = () => {
-  const { data: session } = useSession();
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status !== "loading" && !session) {
+      router.push("/");
+      toast.error("Please login.");
+    }
+  }, [status, session, router]);
 
   // long videos
   const {

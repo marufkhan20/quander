@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { SIDEBAR_ITEMS } from "@/contants";
 import { cn } from "@/lib/utils";
-import { useCreateVideoStore } from "@/store/useCreateVideoStore";
+import { useNavbarStore } from "@/store/useNavbarStore";
 import { LogOut, MoveRight, X } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ interface IProps {
 const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
   const [openAuth, setOpenAuth] = useState(false);
   const pathname = usePathname();
-  const { open, updateInfo } = useCreateVideoStore();
+  const { open, updateInfo } = useNavbarStore();
 
   const { data: session } = useSession();
 
@@ -68,6 +68,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
                 //   className="relative group w-full"
                 // >
                 <NavItem
+                  requiredAuth={item?.requiredAuth}
                   key={item.name}
                   icon={item?.icon}
                   label={item?.name}
@@ -78,6 +79,7 @@ const MobileMenu = ({ openMobileMenu, setOpenMobileMenu }: IProps) => {
 
               {session && (
                 <NavItem
+                  requiredAuth={true}
                   icon={LogOut}
                   label="Sign Out"
                   onClick={() => signOut()}
