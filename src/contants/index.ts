@@ -3,7 +3,6 @@ import {
   BookOpen,
   Coins,
   Cross,
-  Film,
   Heart,
   HeartIcon,
   History,
@@ -13,6 +12,7 @@ import {
   PersonStanding,
   Trophy,
   UserRound,
+  Users,
 } from "lucide-react";
 
 export const SIDEBAR_ITEMS: SidebarItemType[] = [
@@ -32,9 +32,9 @@ export const SIDEBAR_ITEMS: SidebarItemType[] = [
     pathname: "/likes-videos",
   },
   {
-    name: "Uploads",
-    icon: Film,
-    pathname: "/videos",
+    name: "Subscriptions",
+    icon: Users,
+    pathname: "/subscriptions",
   },
   {
     name: "Profile",

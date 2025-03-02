@@ -69,12 +69,11 @@ const ShortVideos = ({ title }: IProps) => {
         </div>
       </Carousel>
 
-      {(!isLoading && !videos) ||
-        (videos?.length === 0 && (
-          <h2 className="text-white/60 text-base font-medium">
-            No Short Video Found!!
-          </h2>
-        ))}
+      {!isLoading && (!videos || videos?.length === 0) && (
+        <h2 className="text-white/60 text-base font-medium">
+          No Short Video Found!!
+        </h2>
+      )}
     </section>
   );
 };

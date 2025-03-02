@@ -73,6 +73,34 @@ export const useGetVideos = ({
   return mutation;
 };
 
+export const useGetSubscribersVideos = ({
+  queryKey,
+  userId,
+}: {
+  queryKey: string;
+  userId: string;
+}) => {
+  type ResponseType = InferResponseType<
+    (typeof client.api.videos.subscriptions)["$get"]
+  >;
+
+  console.log("userId", userId);
+
+  const mutation = useQuery<ResponseType, Error>({
+    queryKey: [queryKey],
+    queryFn: async () => {
+      const response = await client.api.videos.subscriptions["$get"]({
+        query: {
+          userId,
+        },
+      });
+      return await response.json();
+    },
+  });
+
+  return mutation;
+};
+
 export const useGetRelatedVideos = ({
   queryKey,
   id,

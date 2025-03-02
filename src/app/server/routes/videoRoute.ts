@@ -4,6 +4,7 @@ import { z } from "zod";
 import {
   getLikesVideosController,
   getRelatedVideosController,
+  getSubscribersVideosController,
   getVideoController,
   getVideosController,
 } from "../controllers/videoController";
@@ -14,6 +15,7 @@ const app = new Hono()
   .get("/", getVideosController)
   .get("/related-videos", getRelatedVideosController)
   .get("/likes-videos", getLikesVideosController)
+  .get("/subscriptions", getSubscribersVideosController)
   .get("/:id", getVideoController)
   .put(
     "/like-video/:id",

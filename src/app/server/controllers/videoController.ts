@@ -133,6 +133,78 @@ export const getLikesVideosController = async (c: Context) => {
   return c.json(likedVideos);
 };
 
+export const getSubscribersVideosController = async (c: Context) => {
+  const { userId } = c.req.query();
+
+  const subscribedChannels = await prisma.channel.findMany({
+    where: {
+      subscribers: { some: { id: userId } },
+    },
+    select: {
+      id: true,
+      name: true,
+      owner: { select: { image: true } },
+      _count: {
+        select: {
+          videos: true,
+          subscribers: true,
+        },
+      },
+      videos: {
+        select: { likes: true },
+      },
+    },
+  });
+
+  // Transform channels to include required counts
+  const subscribers = subscribedChannels.map((channel) => ({
+    id: channel.id,
+    name: channel.name,
+    image: channel.owner.image,
+    totalVideos: channel._count.videos,
+    totalSubscribers: channel._count.subscribers,
+    totalVideoLikes: channel.videos.reduce(
+      (acc, video) => acc + video.likes.length,
+      0
+    ),
+  }));
+
+  // Extract channel IDs
+  const channelIds = subscribedChannels.map((channel) => channel.id);
+  if (channelIds.length === 0)
+    return c.json({ subscribers, longVideos: [], shortVideos: [] });
+
+  // Fetch videos that match the conditions
+  const videos = await prisma.video.findMany({
+    where: {
+      channelId: { in: channelIds },
+      published: true,
+      generated: true,
+    },
+    select: {
+      id: true,
+      title: true,
+      thumbnail: true,
+      views: true,
+      likes: true,
+      createdAt: true,
+      orientation: true,
+      channelId: true,
+    },
+    orderBy: { createdAt: "desc" },
+  });
+
+  // Split videos into long (landscape) and short (portrait)
+  const longVideos = videos.filter(
+    (video) => video.orientation === "landscape"
+  );
+  const shortVideos = videos.filter(
+    (video) => video.orientation === "portrait"
+  );
+
+  return c.json({ subscribers, longVideos, shortVideos });
+};
+
 export const getVideoController = async (c: Context) => {
   const { id } = c.req.param();
 
